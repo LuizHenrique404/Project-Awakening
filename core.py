@@ -22,9 +22,9 @@ async def on_ready():
 async def on_message(message):
     usuarioReconhecido = False
     humorDoUsuario = "neutro"
-    bom, db_bom = 0
-    comico, db_comico = 0
-    ruim, db_ruim = 0
+    bom = db_bom = 0
+    comico = db_comico = 0
+    ruim = db_ruim = 0
 
     print(f"[{message.author.name}] {message.content.replace('<', '')}")
     if message.author == client.user or message.content[0] != "<":
