@@ -1,0 +1,1 @@
+# Área para a coleta de dados da internet.
