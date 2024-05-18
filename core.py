@@ -95,8 +95,8 @@ async def on_message(message):
                # download the image content
                content = await attachment.read()
     '''
-    usuarioReconhecido[1] = commands.equilibroDePontos(bom, comico, ruim)
-    cursor.execute(f"UPDATE mind.users_info SET bom={usuarioReconhecido[1][0]}, comico={usuarioReconhecido[1][1]}, ruim={usuarioReconhecido[1][2]}, ultima_interação='{datetime.now().date()}' WHERE username='{usuarioReconhecido[0][0]}'")
+    bom, comico, ruim = commands.equilibroDePontos(bom, comico, ruim)
+    cursor.execute(f"UPDATE mind.users_info SET bom={bom}, comico={comico}, ruim={ruim}, ultima_interação='{datetime.now().date()}' WHERE username='{usuarioReconhecido[0][0]}'")
     cnx.commit()
     cnx.close()
 
