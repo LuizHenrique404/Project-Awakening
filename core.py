@@ -86,15 +86,22 @@ async def on_message(message):
                 await message.channel.send(commands.greetingsCommonResponse["raivoso"][randint(0, 4)]) 
     
     if mensagem in commands.computerVisionCall:
-        sleep(0.5)
-        await message.channel.send("Em desenvolvimento...")
-
-    '''
+        content = False
         for attachement in message.attachments:
-            if attachment.content_type.startswith("image"):
-               # download the image content
-               content = await attachment.read()
-    '''
+            if attachement.content_type.startswith("image"):
+               content = await attachement.read()
+               break
+        
+        if content == False:
+            if humorDoUsuario == "bom" or humorDoUsuario == "neutro":
+                await message.channel.send(commands.computerVisionError["formal"][randint(0, 2)])
+            elif humorDoUsuario == "comico":
+                await message.channel.send(commands.computerVisionError["coloquial"][randint(0, 2)])
+            else:
+                await message.channel.send(commands.computerVisionError["raivoso"][randint(0, 2)])
+        else:
+            pass
+
     bom, comico, ruim = commands.equilibroDePontos(bom, comico, ruim)
     cursor.execute(f"UPDATE mind.users_info SET bom={bom}, comico={comico}, ruim={ruim}, ultima_interação='{datetime.now().date()}' WHERE username='{usuarioReconhecido[0][0]}'")
     cnx.commit()

@@ -26,7 +26,3 @@ class HumorClassification():
 
     def getHumor(self, pontos: dict):
         return self.model.predict([pontos])[0]
-
-# Visão computacional.
-# Blog: https://medium.com/@sreuniversity/unlocking-image-classification-with-scikit-learn-a-journey-into-computer-vision-af2cdc881ad
-# OpenCV: https://pyimagesearch.com/start-here/

@@ -62,13 +62,8 @@ greetingsComical = ("fala", "salve", "iae", "coe", "aoba")
 computerVisionCall = ("me diga o voce ve", "me diga o que tem na imagem", "o que tem na imagem", "o que voce ve na imagem", 
                       "o que voce enxerga nessa imagem", "o que voce enxerga na imagem", "me diga o que voce enxerga", 
                       "o que voce enxerga aqui", "o que voce ve aqui", "o que voce ve nessa imagem", "o que tem aqui",
-                      "o que tem nessa imagem", "me fale o que voce ve", "me fale o que tem na imagem", "me fale o que voce enxerga")
-
-# Atualização futura....
-charadeCall = ("me responda uma charada", "eu tenho uma charada para voce", "responda a charada", "responda minha charada", 
-                "hora da charada", "hora da minha charada", "receba minha charada", "receba a charada", "resolva a charada",
-                "resolva a minha charada", "responda uma charada", "hora de responder uma charada", "a charada deverá ser respondida",
-                "eu tenho uma charada", "que tal responder a uma charada", "que tal responder a minha charada", "que tal responder uma charada")
+                      "o que tem nessa imagem", "me fale o que voce ve", "me fale o que tem na imagem", "me fale o que voce enxerga",
+                      "me diga o que voce esta vendo", "me diga o que voce esta enxergando")
 
 # BOT
 greetingsCommonResponse = {"formal":["Olá.", "Olá!", ":robot: Saudações!", "Saudações", "Opa!", "Opa."], # 6
@@ -91,6 +86,12 @@ lastInteractionResponseComical = {"Bastante tempo":["Olha ele aí, demorou mas v
                                     "Um tempinho":[":wave: Bom dia!", "Espero que o final de semana tenha sido massa. :disguised_face:", "Long time no see. :flag_us: :eagle:", 
                                                    "Hora de voltar a ação, capitão. :saluting_face:", "Good day man! :wave: :flag_us:"]} # 5
 
-charadeCallResponse = {"formal":["Certo, mande sua charada.", "Diga-me sua charada.", "Interessante, diga-me.", "Me surpreenda."], 
-                        "coloquial":["Manda a braba. :fire:", "Pode jogar pra cima de mim.", "Quero ver essa potência. :eye::eye:", "Pode ir dizendo."], 
-                        "raivoso":["Seja rápido.", "Diga logo.", "Seja pelo menos criativo.", "Hmm."]}
+computerVisionError = {"formal":["Opa! Tem algo de errado, não consigo entender do que o arquivo em questão se trata. Para evitar erros como este anexe o arquivo de imagem a seu comando.",
+                                 "Ops! Algo está errado, não estou conseguindo intender do que o arquivo se trata. Tente anexar um arquivo de imagem a seu comando.", 
+                                 "Algo está errado, não consigo entender do que se trata o arquivo em questão. Tente anexar a imagem a seu comando, talvez esse seja o problema!"], # 3
+                        "coloquial":["Calma aê cara! Eu não tô conseguindo entender do que a imagem (Se for uma imagem) se trata. Tenta anexar ela ao seu comando. Talvez isso ajude.",
+                                     "Opa, peraê! Não tô conseguindo entender nada, isso aí é uma imagem? Você mandou alguma? Tenta anexar uma foto ao seu comando.",
+                                     "Eu não entendi. Eu não tô entendendo, tem uma imagem pra ser analisada? Você anexou ela ao seu comando, ou algo do tipo?"], # 3
+                        "raivoso":["Como eu deveria interpretar isso? Mande um anexo de imagem, se quiser que eu te diga algo.", 
+                                   "Tá errado, tá tudo errado. Você não se deu ao trabalho de me enviar o arquivo de imagem direito, se é que você fez isso. Mande anexado ao comando.",
+                                   "Sim, certo. Sabe o que eu vejo? Absolutamente nada! Mande a imagem anexada a seu comando, e talvez eu te diga o que tem nela."]}
