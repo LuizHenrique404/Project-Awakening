@@ -39,18 +39,22 @@ async def on_message(message):
 
     if usuarioReconhecido:
         usuarioReconhecido = (usuarioReconhecido[0], 0)
+        bom = usuarioReconhecido[0][1]
+        comico = usuarioReconhecido[0][2]
+        ruim = usuarioReconhecido[0][3]
+
         resultado = commands.calculoDeTempo(usuarioReconhecido[0][4])
         userHumor = mind.HumorClassification()
         humorDoUsuario = userHumor.getHumor(pontos=(usuarioReconhecido[0][1], usuarioReconhecido[0][2], usuarioReconhecido[0][3]))
     else:
-        usuarioReconhecido = (message.author.name.lower(), 0, 0, 0, datetime.now().date(), 1) # 6 Itens
+        usuarioReconhecido = ([message.author.name.lower(), 0, 0, 0, datetime.now().date()], 1) # 6 Itens
         await message.channel.send(commands.greetingsResponseUnknown["cumprimento"][randint(0, 2)])
         sleep(0.5)
         await message.channel.send(commands.greetingsResponseUnknown["apresentação"][randint(0, 4)])
         if mensagem.split(" ")[0] not in commands.greetings:
             sleep(0.7)
             await message.channel.send(commands.greetingsResponseUnknown["continuação"][randint(0, 4)])
-        cursor.execute(f"INSERT INTO mind.users_info (username, bom, comico, ruim, ultima_interação) VALUES ('{message.author.name.lower()}', 0, 0, 0, '{datetime.now().date()}')")
+        cursor.execute(f"INSERT INTO mind.users_info (username, bom, comico, ruim, ultima_interação) VALUES ('{usuarioReconhecido[0][0]}', 0, 0, 0, '{usuarioReconhecido[0][4]}')")
         cnx.commit()
         sleep(0.7)
 
@@ -60,20 +64,29 @@ async def on_message(message):
     # Checar o ganho de pontos, e seu balanceamento. (Bom e Cómico)
 
     if mensagem.split(" ")[0] in commands.greetings:
-        bom = 0.1
+        bom += 0.1
         if mensagem.split(" ")[0] in commands.greetingsComical:
-                bom = 0.15
-                comico = 0.2
+                bom += 0.05
+                comico += 0.2
 
+        print(usuarioReconhecido[0][4])
         sleep(0.5)
         if usuarioReconhecido[1] == 0:
             if humorDoUsuario == "bom" or humorDoUsuario == "neutro":
                 await message.channel.send(commands.greetingsCommonResponse["formal"][randint(0, 5)])
+                try:
+                    await message.channel.send(commands.lastInteractionResponse[resultado][randint(0, 2)])
+                except:
+                    pass
             elif humorDoUsuario == "comico":
                 await message.channel.send(commands.greetingsCommonResponse["coloquial"][randint(0, 5)])
+                try:
+                    await message.channel.send(commands.lastInteractionResponseComical[resultado][randint(0, 5)])
+                except:
+                    pass
             else:
                 await message.channel.send(commands.greetingsCommonResponse["raivoso"][randint(0, 4)]) 
-    cursor.execute(f"UPDATE mind.users_info SET bom={bom}, comico={comico}, ruim={ruim}, ultima_interação='{datetime.now().date()}' WHERE username='{message.author.name.lower()}'")
+    cursor.execute(f"UPDATE mind.users_info SET bom={bom}, comico={comico}, ruim={ruim}, ultima_interação='{datetime.now().date()}' WHERE username='{usuarioReconhecido[0][0]}'")
     cnx.commit()
     cnx.close()
 
