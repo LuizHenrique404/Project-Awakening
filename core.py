@@ -22,9 +22,9 @@ async def on_ready():
 async def on_message(message):
     usuarioReconhecido = False
     humorDoUsuario = "neutro"
-    bom = db_bom = 0
-    comico = db_comico = 0
-    ruim = db_ruim = 0
+    bom = 0
+    comico = 0
+    ruim = 0
 
     print(f"[{message.author.name}] {message.content.replace('<', '')}")
     if message.author == client.user or message.content[0] != "<":
@@ -68,8 +68,6 @@ async def on_message(message):
         if mensagem.split(" ")[0] in commands.greetingsComical:
                 bom += 0.05
                 comico += 0.2
-
-        print(usuarioReconhecido[0][4])
         sleep(0.5)
         if usuarioReconhecido[1] == 0:
             if humorDoUsuario == "bom" or humorDoUsuario == "neutro":
@@ -86,7 +84,19 @@ async def on_message(message):
                     pass
             else:
                 await message.channel.send(commands.greetingsCommonResponse["raivoso"][randint(0, 4)]) 
-    cursor.execute(f"UPDATE mind.users_info SET bom={bom}, comico={comico}, ruim={ruim}, ultima_interação='{datetime.now().date()}' WHERE username='{usuarioReconhecido[0][0]}'")
+    
+    if mensagem in commands.computerVisionCall:
+        sleep(0.5)
+        await message.channel.send("Em desenvolvimento...")
+
+    '''
+        for attachement in message.attachments:
+            if attachment.content_type.startswith("image"):
+               # download the image content
+               content = await attachment.read()
+    '''
+    usuarioReconhecido[1] = commands.equilibroDePontos(bom, comico, ruim)
+    cursor.execute(f"UPDATE mind.users_info SET bom={usuarioReconhecido[1][0]}, comico={usuarioReconhecido[1][1]}, ruim={usuarioReconhecido[1][2]}, ultima_interação='{datetime.now().date()}' WHERE username='{usuarioReconhecido[0][0]}'")
     cnx.commit()
     cnx.close()
 

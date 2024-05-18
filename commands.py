@@ -41,11 +41,28 @@ def calculoDeTempo(ultimaInteracao: str):
     else:
         return "Recentemente"
 
+def equilibroDePontos(bom: int, comico: int, ruim: int):
+    if bom > 10 or comico > 10 or ruim > 10:
+        bom = bom / 10
+        ruim = ruim / 10
+        comico = comico / 10
+    
+    if bom < 0.1: bom = 0
+    if ruim < 0.1: ruim = 0
+    if comico < 0.1: comico = 0
+
+    return (bom, comico, ruim)
+
 # ADICIONAR UM FATOR DE ARMAZENAMENTO DE PERGUNTAS E RESPOSTAS NO DATABASE.
 
 # USER
 greetings = ("ola", "oi", "opa", "saudacoes", "ei", "e ai", "fala", "salve", "iae", "coe", "aoba")
 greetingsComical = ("fala", "salve", "iae", "coe", "aoba")
+
+computerVisionCall = ("me diga o voce ve", "me diga o que tem na imagem", "o que tem na imagem", "o que voce ve na imagem", 
+                      "o que voce enxerga nessa imagem", "o que voce enxerga na imagem", "me diga o que voce enxerga", 
+                      "o que voce enxerga aqui", "o que voce ve aqui", "o que voce ve nessa imagem", "o que tem aqui",
+                      "o que tem nessa imagem", "me fale o que voce ve", "me fale o que tem na imagem", "me fale o que voce enxerga")
 
 # Atualização futura....
 charadeCall = ("me responda uma charada", "eu tenho uma charada para voce", "responda a charada", "responda minha charada", 
