@@ -9,8 +9,11 @@ _/Ferramentas utilizadas\____________
  o-API de pesquisa (Indefinido)
  o-Scrapy [Não instalado]
 -Ferramentas para desenvolvimento de seu cérebro;
+ o-Numpy
+ o-OpenCV
+ o-Matplotlib
+ o-TensorFlow
  o-Scikit-Learn
- o-TensorFlow [Não instalado]
 -Ferramentas para sua comunicação.
  o-Prompt de comando (M2D)
  o-Discord API (M2U)

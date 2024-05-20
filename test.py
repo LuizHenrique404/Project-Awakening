@@ -13,12 +13,12 @@ training_images, testing_images = training_images / 255, testing_images / 255
 class_names = ["Plane", "Car", "Bird", "Deer", "Dog", "Frog", "Horse", "Ship", "Truck"]
 
 # Redução das imagens para treino.
-training_images = training_images[:20000]
-training_labels = training_labels[:20000]
-testing_images = testing_images[:4000]
-testing_labels = testing_labels[:4000]
-# Para tornar o procedimento mais rápido (Disconta a precisão)
+training_images = training_images
+training_labels = training_labels
+testing_images = testing_images
+testing_labels = testing_labels
 
+'''
 # As camadas para operações da rede neural serão ativadas de maneira sequencial
 model = models.Sequential()
 model.add(layers.Conv2D(32, (3, 3), activation="relu"))
@@ -41,3 +41,18 @@ print(f"Loss: {loss} \nAccuracy: {accuracy}")
 # Irá salvar o modelo em um arquivo que poderá ser carregado para evitar a repetição do treino.
 model.save("image_classifier.keras")
 # models.load_model("arquivo.keras")
+'''
+from PIL import Image
+model = models.load_model("image_classifier.keras")
+image = Image.open("cavalo.jpg")
+image = image.resize((32, 32))
+image.save("cavalo.jpg")
+
+image = cv2.imread("cavalo.jpg")
+# image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
+prediction = model.predict(np.array([image]) / 255)
+index = np.argmax(prediction)
+print(f"Prediction: {class_names[index]}") # A escala da imagem precisa ser a mesma do configurado [32x32]
+
+# ![Procurar outros métodos]!
