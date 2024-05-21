@@ -2,6 +2,7 @@
 # [    ] <- Espaçamento.
 
 from datetime import datetime
+import mysql.connector
 
 def filtro(brutoDaFrase: str):
 
@@ -19,6 +20,15 @@ def filtro(brutoDaFrase: str):
     filtoDaFrase = filtoDaFrase.replace("/", "").replace("<", "")
 
     return filtoDaFrase
+
+def armazenamentoDeComandos(contentType: str, question: str, response: str):
+    cnx = mysql.connector.connect(user='root', password='pass334', host='localhost', database='mind')
+    cursor = cnx.cursor()
+    question = filtro(question)
+
+    cursor.execute(f"INSERT INTO mind.debug_mode (question, response, content) VALUES ('{question}', '{response}', '{contentType}');")
+    cnx.commit()
+    cnx.close()
 
 def calculoDeTempo(ultimaInteracao: str):
     tempoAtual = str(datetime.now().date()).split("-")
@@ -54,6 +64,9 @@ def equilibroDePontos(bom: int, comico: int, ruim: int):
     return (bom, comico, ruim)
 
 # ADICIONAR UM FATOR DE ARMAZENAMENTO DE PERGUNTAS E RESPOSTAS NO DATABASE.
+
+# AUTHORIZATION
+admin = ("the_code333", "linusdmarc", "m.luffy5404", "bondaismagic")
 
 # USER
 greetings = ("ola", "oi", "opa", "saudacoes", "ei", "e ai", "fala", "salve", "iae", "coe", "aoba")

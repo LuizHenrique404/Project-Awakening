@@ -11,6 +11,10 @@ botToken = "MTIxNjgxNjU4Mjg0MDU0OTM4Nw.GVIJ51.8ejBZn4DTaqWilXrUbEAyuO3WG4DSkxtNh
 
 intents = discord.Intents.default()
 intents.message_content = True
+learning_mode = False
+contentType = False
+question = False
+response = False
 
 client = discord.Client(intents=intents)
 
@@ -22,17 +26,36 @@ async def on_ready():
 async def on_message(message):
     usuarioReconhecido = False
     humorDoUsuario = "neutro"
+    respondido = False
     bom = 0
     comico = 0
     ruim = 0
 
     print(f"[{message.author.name}] {message.content.replace('<', '')}")
     if message.author == client.user or message.content[0] != "<":
-        return
+        if question[1] == message.author.name and response:
+            if message.content in ("formal", "comico", "raivoso"):
+                contentType = message.content
+                commands.armazenamentoDeComandos(contentType, question[0], response)
+                contentType = False
+                question = False
+                response = False
+                await message.channel.send("COMANDO ARMAZENADO.")
+                print("[SYSTEM] Conteúdo armazenado no DATABASE. (learning_mode)")
+            else:
+                await message.channel.send("O tom do conteúdo informado deve ser um dos três citados anteriormente. (formal, comico, raivoso)")
+        elif question[1] == message.author.name:
+            response = message.content
+
+            await message.channel.send("RESPOSTA REGISTRADA.")
+            await message.channel.send("Agora informe o tom do conteúdo. (formal, comico, raivoso)")
+            await message.channel.send("Todas as letras de sua resposta devem estar minúsculas.")
+        else:
+            return
     
     mensagem = commands.filtro(message.content)
     cnx = mysql.connector.connect(user='root', password='pass334', host='localhost', database='mind')
-    cursor = cnx.cursor() # FALTA TERMINAR DE CONFIGURAR O MYSQL
+    cursor = cnx.cursor()
 
     cursor.execute(f"SELECT * FROM mind.users_info WHERE username='{message.author.name.lower()}';")
     usuarioReconhecido = cursor.fetchall()
@@ -47,6 +70,7 @@ async def on_message(message):
         userHumor = mind.HumorClassification()
         humorDoUsuario = userHumor.getHumor(pontos=(usuarioReconhecido[0][1], usuarioReconhecido[0][2], usuarioReconhecido[0][3]))
     else:
+        respondido = True
         usuarioReconhecido = ([message.author.name.lower(), 0, 0, 0, datetime.now().date()], 1) # 6 Itens
         await message.channel.send(commands.greetingsResponseUnknown["cumprimento"][randint(0, 2)])
         sleep(0.5)
@@ -64,6 +88,7 @@ async def on_message(message):
     # Checar o ganho de pontos, e seu balanceamento. (Bom e Cómico)
 
     if mensagem.split(" ")[0] in commands.greetings:
+        respondido = True
         bom += 0.1
         if mensagem.split(" ")[0] in commands.greetingsComical:
                 bom += 0.05
@@ -85,7 +110,19 @@ async def on_message(message):
             else:
                 await message.channel.send(commands.greetingsCommonResponse["raivoso"][randint(0, 4)]) 
     
+    if message.content == "<Learning Mode: True" and message.author.name in commands.admin:
+        learning_mode = True
+        print("[SYSTEM] LEARNING MODE: True")
+        await message.channel.send("**[MODO DE APRENDIZADO ATIVADO]**")
+        await message.channel.send("**Question:** Mande um comando para o bot.")
+        await message.channel.send("**Response:** Mande a resposta para ser armazenada.")
+        await message.channel.send("**ContentType:** Mande o tom do conteúdo.")
+        await message.channel.send("Os três tipos serão melhor explicados durante a operação.")
+    if message.content == "<Learning Mode: False" and message.author.name in commands.admin:
+        learning_mode = False
+
     if mensagem in commands.computerVisionCall:
+        respondido = True
         content = False
         for attachement in message.attachments:
             if attachement.content_type.startswith("image"):
@@ -101,6 +138,15 @@ async def on_message(message):
                 await message.channel.send(commands.computerVisionError["raivoso"][randint(0, 2)])
         else:
             pass
+
+    if learning_mode and not respondido:
+        question = (mensagem, message.author.name)
+        await message.channel.send("RESPOSTA NÃO IDENTIFICADA PELO SISTEMA.")
+        await message.channel.send("Por favor, envie a resposa mais adequada a este comando.")
+        await message.channel.send(r"E utilize **%br%** no caso de duas mensagens ou mais como resposta.")
+        await message.channel.send("Exemplo:\n**Mensagem 1:** Provavelmente não... \n**Mensagem 2:** Mas talvez tenha.\nSeria o equivalente a: ",r"Provavelmente não...%br%Mas talvez tenha.")
+
+
 
     bom, comico, ruim = commands.equilibroDePontos(bom, comico, ruim)
     cursor.execute(f"UPDATE mind.users_info SET bom={bom}, comico={comico}, ruim={ruim}, ultima_interação='{datetime.now().date()}' WHERE username='{usuarioReconhecido[0][0]}'")
