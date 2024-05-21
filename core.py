@@ -36,23 +36,22 @@ async def on_message(message):
     print(f"[{message.author.name}] {message.content}")
     if message.author == client.user or message.content[0] != "<":
         if user == message.author.name and response:
-            if message.content in ("formal", "comico", "raivoso"):
+            if message.content in ("formal", "comico", "ruim", "neutro"):
                 contentType = message.content
                 commands.armazenamentoDeComandos(contentType, question, response)
                 contentType = False
                 question = False
                 response = False
-                user = False
                 await message.channel.send("COMANDO ARMAZENADO.")
                 print("[SYSTEM] Conteúdo armazenado no DATABASE. (learning_mode)")
             else:
-                await message.channel.send("O tom do conteúdo informado deve ser um dos três citados anteriormente. (formal, comico, raivoso)")
+                await message.channel.send("O tom do conteúdo informado deve ser um dos três já citados. (formal, comico, ruim, neutro)")
             return
         elif user == message.author.name and question:
             response = message.content
 
             await message.channel.send("RESPOSTA REGISTRADA.")
-            await message.channel.send("Agora informe o tom do conteúdo. (formal, comico, raivoso)")
+            await message.channel.send("Agora informe o tom do conteúdo. (formal, comico, ruim, neutro)")
             await message.channel.send("Todas as letras de sua resposta devem estar minúsculas.")
             return
         else:
@@ -132,6 +131,47 @@ async def on_message(message):
                 await message.channel.send(commands.computerVisionError["raivoso"][randint(0, 2)])
         else:
             pass
+    
+    # Está sessão deve semrpe estar aqui embaixo nesta ordem.
+    cursor.execute(f"SELECT * FROM mind.debug_mode WHERE question='{mensagem}';")
+    learnedInfo = cursor.fetchall()
+
+    if learnedInfo:
+        # 0 - Question 1 - Response 2 - ContentType
+        respondido = True
+        learnedInfo = learnedInfo[0]
+        
+        if learnedInfo[2] == "formal":
+            bom += 0.1
+        elif learnedInfo[2] == "comico":
+            bom += 0.15
+            comico += 0.1
+        elif learnedInfo[2] == "ruim":
+            ruim += 0.15
+
+        if r"%br%" in learnedInfo[1]:
+            learnedSeparateResponse = learnedInfo[1].split(r"%br%")
+
+            for texto in learnedSeparateResponse:
+                sleep(0.5)
+                await message.channel.send(texto)
+        else:
+            await message.channel.send(learnedInfo[1])
+
+    if message.content == "<Learning Mode: True" and message.author.name in commands.admin:
+        user = message.author.name
+        learning_mode = True
+        respondido = True
+        print("[SYSTEM] LEARNING MODE: True", user)
+        await message.channel.send("**[MODO DE APRENDIZADO ATIVADO]**")
+        await message.channel.send("**Question:** Mande um comando para o bot.")
+        await message.channel.send("**Response:** Mande a resposta para ser armazenada.")
+        await message.channel.send("**ContentType:** Mande o tom do conteúdo.")
+        await message.channel.send("Os três tipos serão melhor explicados durante a operação.")
+    if message.content == "<Learning Mode: False" and message.author.name in commands.admin:
+        await message.channel.send("**[MODO DE APRENDIZADO DESATIVADO]**")
+        learning_mode = False
+        user = False
 
     if learning_mode == True and not respondido and user == message.author.name:
         question = mensagem
@@ -141,18 +181,6 @@ async def on_message(message):
         await message.channel.send(r"E utilize **%br%** no caso de duas mensagens ou mais como resposta.")
         await message.channel.send("Exemplo:\n**Mensagem 1:** Provavelmente não... \n**Mensagem 2:** Mas talvez tenha.")
         await message.channel.send(r"Seria o equivalente a: "r"Provavelmente não...%br%Mas talvez tenha.")
-    
-    if message.content == "<Learning Mode: True" and message.author.name in commands.admin:
-        user = message.author.name
-        learning_mode = True
-        print("[SYSTEM] LEARNING MODE: True", user)
-        await message.channel.send("**[MODO DE APRENDIZADO ATIVADO]**")
-        await message.channel.send("**Question:** Mande um comando para o bot.")
-        await message.channel.send("**Response:** Mande a resposta para ser armazenada.")
-        await message.channel.send("**ContentType:** Mande o tom do conteúdo.")
-        await message.channel.send("Os três tipos serão melhor explicados durante a operação.")
-    if message.content == "<Learning Mode: False" and message.author.name in commands.admin:
-        learning_mode = False
 
     bom, comico, ruim = commands.equilibroDePontos(bom, comico, ruim)
     cursor.execute(f"UPDATE mind.users_info SET bom={bom}, comico={comico}, ruim={ruim}, ultima_interação='{datetime.now().date()}' WHERE username='{usuarioReconhecido[0][0]}'")
