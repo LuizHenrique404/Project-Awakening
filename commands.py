@@ -66,7 +66,7 @@ def equilibroDePontos(bom: int, comico: int, ruim: int):
 # ADICIONAR UM FATOR DE ARMAZENAMENTO DE PERGUNTAS E RESPOSTAS NO DATABASE.
 
 # AUTHORIZATION
-admin = ("the_code333", "linusdmarc", "m.luffy5404", "bondaismagic")
+admin = ("the_coder333", "linusdmarc", "m.luffy5404", "bondaismagic")
 
 # USER
 greetings = ("ola", "oi", "opa", "saudacoes", "ei", "e ai", "fala", "salve", "iae", "coe", "aoba")
