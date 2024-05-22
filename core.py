@@ -114,7 +114,7 @@ async def on_message(message):
             else:
                 await message.channel.send(commands.greetingsCommonResponse["raivoso"][randint(0, 4)]) 
 
-    if mensagem in commands.computerVisionCall:
+    if mensagem in commands.imageClassificationCall:
         respondido = True
         content = False
         for attachement in message.attachments:

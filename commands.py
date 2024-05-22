@@ -72,7 +72,9 @@ admin = ("the_coder333", "linusdmarc", "m.luffy5404", "bondaismagic")
 greetings = ("ola", "oi", "opa", "saudacoes", "ei", "e ai", "fala", "salve", "iae", "coe", "aoba")
 greetingsComical = ("fala", "salve", "iae", "coe", "aoba")
 
-computerVisionCall = ("me diga o voce ve", "me diga o que tem na imagem", "o que tem na imagem", "o que voce ve na imagem", 
+imageClassificationCall = ()
+
+objectDetectionCall = ("me diga o voce ve", "me diga o que tem na imagem", "o que tem na imagem", "o que voce ve na imagem", 
                       "o que voce enxerga nessa imagem", "o que voce enxerga na imagem", "me diga o que voce enxerga", 
                       "o que voce enxerga aqui", "o que voce ve aqui", "o que voce ve nessa imagem", "o que tem aqui",
                       "o que tem nessa imagem", "me fale o que voce ve", "me fale o que tem na imagem", "me fale o que voce enxerga",
@@ -100,7 +102,7 @@ lastInteractionResponseComical = {"Bastante tempo":["Olha ele aí, demorou mas v
                                                    "Hora de voltar a ação, capitão. :saluting_face:", "Good day man! :wave: :flag_us:"]} # 5
 
 computerVisionError = {"formal":["Opa! Tem algo de errado, não consigo entender do que o arquivo em questão se trata. Para evitar erros como este anexe o arquivo de imagem a seu comando.",
-                                 "Ops! Algo está errado, não estou conseguindo intender do que o arquivo se trata. Tente anexar um arquivo de imagem a seu comando.", 
+                                 "Ops! Algo está errado, não estou conseguindo entender do que o arquivo se trata. Tente anexar um arquivo de imagem a seu comando.", 
                                  "Algo está errado, não consigo entender do que se trata o arquivo em questão. Tente anexar a imagem a seu comando, talvez esse seja o problema!"], # 3
                         "coloquial":["Calma aê cara! Eu não tô conseguindo entender do que a imagem (Se for uma imagem) se trata. Tenta anexar ela ao seu comando. Talvez isso ajude.",
                                      "Opa, peraê! Não tô conseguindo entender nada, isso aí é uma imagem? Você mandou alguma? Tenta anexar uma foto ao seu comando.",

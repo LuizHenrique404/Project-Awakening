@@ -1,58 +1,28 @@
-# https://pyimagesearch.com/start-here/
-
-from keras import datasets, layers, models
-import matplotlib.pyplot as plt
-from tensorflow import keras
+from keras import layers, utils, Sequential, losses
+import matplotlib as plt
+import tensorflow as tf
+import pandas as pd
 import numpy as np
-import cv2
 
-# Receber e Adaptar as informações.
-(training_images, training_labels), (testing_images, testing_labels) = datasets.cifar10.load_data()
-training_images, testing_images = training_images / 255, testing_images / 255
+validation_path = "C:\\Users\\Mrleonard\\Documents\\Programs\\Project_Awakening\\Machine_Learning\\imageClassificationFolder\\Fruits_Vegetables\\validation"
+train_path = "C:\\Users\\Mrleonard\\Documents\\Programs\\Project_Awakening\\Machine_Learning\\imageClassificationFolder\\Fruits_Vegetables\\train"
+test_path = "C:\\Users\\Mrleonard\\Documents\\Programs\\Project_Awakening\\Machine_Learning\\imageClassificationFolder\\Fruits_Vegetables\\test"
 
-class_names = ["Plane", "Car", "Bird", "Deer", "Dog", "Frog", "Horse", "Ship", "Truck"]
+image_width = 180
+image_height = 180
 
-# Redução das imagens para treino.
-training_images = training_images
-training_labels = training_labels
-testing_images = testing_images
-testing_labels = testing_labels
+data_train = utils.image_dataset_from_directory(train_path, shuffle=True, image_size=(image_width, image_height), batch_size=32, validation_split=False)
+category = data_train.class_names
 
-'''
-# As camadas para operações da rede neural serão ativadas de maneira sequencial
-model = models.Sequential()
-model.add(layers.Conv2D(32, (3, 3), activation="relu"))
-model.add(layers.MaxPooling2D((2, 2)))
-model.add(layers.Conv2D(64, (2, 2), activation="relu"))
-model.add(layers.MaxPooling2D((2, 2)))
-model.add(layers.Conv2D(64, (2, 2), activation="relu"))
-model.add(layers.Flatten())
-model.add(layers.Dense(64, activation="relu"))
-model.add(layers.Dense(10, activation="softmax"))
-# A ultima basicamente servirá para poder entregar uma probabilidade de acerto.
+data_validation = utils.image_dataset_from_directory(validation_path, shuffle=False, image_size=(image_width, image_height), batch_size=32, validation_split=False)
+data_test = utils.image_dataset_from_directory(test_path, shuffle=False, image_size=(image_width, image_height), batch_size=32, validation_split=False)
+                        # v Ajuste de cores                 # 1º Neurônios 2º RGB
+model = Sequential([layers.Rescaling(1./255), layers.Conv2D(16, 3, padding='same', activation='relu'), 
+                    layers.MaxPooling2D(), layers.Conv2D(32, 3, padding='same', activation='relu'),
+                    layers.MaxPooling2D(), layers.Conv2D(64, 3, padding='same', activation='relu'),
+                    layers.MaxPooling2D(), layers.Flatten(), layers.Dropout(0.2), layers.Dense(128),
+                    layers.Dense(len(category))])
 
-model.compile(optimizer="adam", loss="sparse_categorical_crossentropy", metrics=["accuracy"])
-model.fit(training_images, training_labels, epochs=10, validation_data=(testing_images, testing_labels))
-# epochs - Significa quantas vezes o sistema testará com a mesma imagem (Default = 1)
-
-loss, accuracy = model.evaluate(testing_images, testing_labels)
-print(f"Loss: {loss} \nAccuracy: {accuracy}")
-
-# Irá salvar o modelo em um arquivo que poderá ser carregado para evitar a repetição do treino.
-model.save("image_classifier.keras")
-# models.load_model("arquivo.keras")
-'''
-from PIL import Image
-model = models.load_model("image_classifier.keras")
-image = Image.open("cavalo.jpg")
-image = image.resize((32, 32))
-image.save("cavalo.jpg")
-
-image = cv2.imread("cavalo.jpg")
-# image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-
-prediction = model.predict(np.array([image]) / 255)
-index = np.argmax(prediction)
-print(f"Prediction: {class_names[index]}") # A escala da imagem precisa ser a mesma do configurado [32x32]
-
-# ![Procurar outros métodos]!
+model.compile(optimizer="adam", loss=losses.SparseCategoricalCrossentropy(from_logits=True), metrics=["accuracy"])
+model.fit(data_train, validation_data=data_validation, epochs=25)
+model.save("imageClassification.keras")

@@ -5,6 +5,10 @@ SISTEMA DE PONTOS DO USUÁRIO:
 -NÚMERO ACIMA DE DEZ: Todos os pontos são multiplicados por 0.1 (10.0 > 1.0 / 5.0 > 0.5) 
 '''
 
+# INCLUIR: Object Detection
+# INCLUIR: Image Classification
+# AO CRIAR SEU PRÓRIO BANCO DE DADOS: Utilize para treinamento ao menos 100 imagens.
+
 from sklearn.model_selection import train_test_split
 import pandas as pd
 
