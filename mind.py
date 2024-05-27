@@ -6,11 +6,15 @@ SISTEMA DE PONTOS DO USUÁRIO:
 '''
 
 # INCLUIR: Object Detection
-# INCLUIR: Image Classification
+# INCLUIR: Image Classification [Feito]
 # AO CRIAR SEU PRÓRIO BANCO DE DADOS: Utilize para treinamento ao menos 100 imagens.
 
 from sklearn.model_selection import train_test_split
+from keras import utils, models
+import tensorflow as tf
 import pandas as pd
+import numpy as np
+import commands
 
 class HumorClassification():
     from sklearn.ensemble import RandomForestClassifier
@@ -30,3 +34,15 @@ class HumorClassification():
 
     def getHumor(self, pontos: dict):
         return self.model.predict([pontos])[0]
+    
+def imageClassification():    
+    image_width = 165
+    image_height = 165
+
+    model = models.load_model("Machine_Learning\\imageClassificationFolder\\imageClassification.keras")
+    image = utils.load_img("Machine_Learning\\classificationImage.png", target_size=(image_height, image_width))
+    array = utils.array_to_img(image)
+    imgBat = tf.expand_dims(array, 0)
+
+    preditcion = model.predict(imgBat)
+    return commands.objectDetectionNames[np.argmax(preditcion)]

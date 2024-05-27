@@ -5,6 +5,7 @@ from datetime import datetime
 from random import randint
 from time import sleep
 import mysql.connector
+import requests
 import discord
 
 botToken = "MTIxNjgxNjU4Mjg0MDU0OTM4Nw.GVIJ51.8ejBZn4DTaqWilXrUbEAyuO3WG4DSkxtNhLZXk"
@@ -88,8 +89,9 @@ async def on_message(message):
 
     # Pedra papel e tesoura estratégico.
     # Adicionar um fator batalha de rap.
-    # Adicionar o fator reconhecimento de imagens.
-    # Checar o ganho de pontos, e seu balanceamento. (Bom e Cómico)
+
+    # Atualizar o modo de aprendizado. (Permitir mais de um User)
+    # Adicionar interações mais dinâmicas ao classificador de imagens.
 
     if mensagem.split(" ")[0] in commands.greetings:
         respondido = True
@@ -117,20 +119,22 @@ async def on_message(message):
     if mensagem in commands.imageClassificationCall:
         respondido = True
         content = False
-        for attachement in message.attachments:
-            if attachement.content_type.startswith("image"):
-               content = await attachement.read()
-               break
-        
-        if content == False:
+
+        try:
+            image = requests.get(message.attachments[0].url)
+            open(f'C:\\Users\\Mrleonard\\Documents\\Programs\\Project_Awakening\\Machine_Learning\\classificationImage.png', 'wb').write(image.content)
+
+            content = mind.imageClassification()
+            print("[SYSTEM] Prediction:", content)
+
+            await message.channel.send(content)
+        except:
             if humorDoUsuario == "bom" or humorDoUsuario == "neutro":
                 await message.channel.send(commands.computerVisionError["formal"][randint(0, 2)])
             elif humorDoUsuario == "comico":
                 await message.channel.send(commands.computerVisionError["coloquial"][randint(0, 2)])
             else:
                 await message.channel.send(commands.computerVisionError["raivoso"][randint(0, 2)])
-        else:
-            pass
     
     # Está sessão deve semrpe estar aqui embaixo nesta ordem.
     cursor.execute(f"SELECT * FROM mind.debug_mode WHERE question='{mensagem}';")

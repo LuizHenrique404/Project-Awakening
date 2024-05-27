@@ -72,7 +72,13 @@ admin = ("the_coder333", "linusdmarc", "m.luffy5404", "bondaismagic")
 greetings = ("ola", "oi", "opa", "saudacoes", "ei", "e ai", "fala", "salve", "iae", "coe", "aoba")
 greetingsComical = ("fala", "salve", "iae", "coe", "aoba")
 
-imageClassificationCall = ()
+# Ainda a se adicionar valores....
+imageClassificationCall = ("o que e isto", "do que a imagem se trata", "o que ta na imagem", "que isso", "que isso na imagem", "que isso na foto",
+                           "que o objeto e esse", "qual e este objeto", "qual e esse objeto", "do que o objeto se trata", "o que o objeto e",
+                           "qual o objeto da imagem", "qual o objeto da foto", "me diga o objeto que esta na foto", "me diga o objeto que esta na imagem",
+                           "me diga o objeto que esta aqui", "me fale o objeto que esta na imagem", "me fale o objeto que tem na imagem",
+                            "me fale o objeto que tem na foto", "que objeto e este", "o que esta na imagem", "o que esta na foto",
+                            "o que e isso", "do que esta imagem se trata")
 
 objectDetectionCall = ("me diga o voce ve", "me diga o que tem na imagem", "o que tem na imagem", "o que voce ve na imagem", 
                       "o que voce enxerga nessa imagem", "o que voce enxerga na imagem", "me diga o que voce enxerga", 
@@ -101,7 +107,12 @@ lastInteractionResponseComical = {"Bastante tempo":["Olha ele aí, demorou mas v
                                     "Um tempinho":[":wave: Bom dia!", "Espero que o final de semana tenha sido massa. :disguised_face:", "Long time no see. :flag_us: :eagle:", 
                                                    "Hora de voltar a ação, capitão. :saluting_face:", "Good day man! :wave: :flag_us:"]} # 5
 
-computerVisionError = {"formal":["Opa! Tem algo de errado, não consigo entender do que o arquivo em questão se trata. Para evitar erros como este anexe o arquivo de imagem a seu comando.",
+imageClassificationResponse = {}
+
+# PREDICTION
+objectDetectionNames = ['chave-inglesa', 'tesoura', 'vassoura']
+
+imageOperationsError = {"formal":["Opa! Tem algo de errado, não consigo entender do que o arquivo em questão se trata. Para evitar erros como este anexe o arquivo de imagem a seu comando.",
                                  "Ops! Algo está errado, não estou conseguindo entender do que o arquivo se trata. Tente anexar um arquivo de imagem a seu comando.", 
                                  "Algo está errado, não consigo entender do que se trata o arquivo em questão. Tente anexar a imagem a seu comando, talvez esse seja o problema!"], # 3
                         "coloquial":["Calma aê cara! Eu não tô conseguindo entender do que a imagem (Se for uma imagem) se trata. Tenta anexar ela ao seu comando. Talvez isso ajude.",
