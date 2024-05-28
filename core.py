@@ -90,9 +90,9 @@ async def on_message(message):
         cnx.commit()
         sleep(0.7)
 
-    # Pedra papel e tesoura estratégico.
     # Adicionar um fator batalha de rap.
-
+    # Adicionar fator histórias aleatórias.
+    
     if mensagem.split(" ")[0] in commands.greetings:
         respondido = True
         bom += 0.1
