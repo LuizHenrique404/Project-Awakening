@@ -12,11 +12,14 @@ botToken = "MTIxNjgxNjU4Mjg0MDU0OTM4Nw.GVIJ51.8ejBZn4DTaqWilXrUbEAyuO3WG4DSkxtNh
 
 intents = discord.Intents.default()
 intents.message_content = True
+
 learning_mode = False
 contentType = False
 question = False
 response = False
-user = False
+
+thankUsers = list()
+user = list()
 
 client = discord.Client(intents=intents)
 
@@ -36,7 +39,7 @@ async def on_message(message):
 
     print(f"[{message.author.name}] {message.content}")
     if message.author == client.user or message.content[0] != "<":
-        if user == message.author.name and response:
+        if message.author.name in user and response:
             if message.content in ("formal", "comico", "ruim", "neutro"):
                 contentType = message.content
                 commands.armazenamentoDeComandos(contentType, question, response)
@@ -48,7 +51,7 @@ async def on_message(message):
             else:
                 await message.channel.send("O tom do conteúdo informado deve ser um dos três já citados. (formal, comico, ruim, neutro)")
             return
-        elif user == message.author.name and question:
+        elif message.author.name in user and question:
             response = message.content
 
             await message.channel.send("RESPOSTA REGISTRADA.")
@@ -90,9 +93,6 @@ async def on_message(message):
     # Pedra papel e tesoura estratégico.
     # Adicionar um fator batalha de rap.
 
-    # Atualizar o modo de aprendizado. (Permitir mais de um User)
-    # Adicionar interações mais dinâmicas ao classificador de imagens.
-
     if mensagem.split(" ")[0] in commands.greetings:
         respondido = True
         bom += 0.1
@@ -127,14 +127,26 @@ async def on_message(message):
             content = mind.imageClassification()
             print("[SYSTEM] Prediction:", content)
 
-            await message.channel.send(content)
-        except:
+            bom += 0.05
             if humorDoUsuario == "bom" or humorDoUsuario == "neutro":
-                await message.channel.send(commands.computerVisionError["formal"][randint(0, 2)])
+                await message.channel.send(f"{commands.imageClassificationResponse["formal"][randint(0, 8)]} {content}")
             elif humorDoUsuario == "comico":
-                await message.channel.send(commands.computerVisionError["coloquial"][randint(0, 2)])
+                await message.channel.send(f"{commands.imageClassificationResponse["coloquial"][randint(0, 8)]} {content}")
             else:
-                await message.channel.send(commands.computerVisionError["raivoso"][randint(0, 2)])
+                if randint(1, 3) == 1:
+                    await message.channel.send(f"{commands.imageClassificationResponse["raivoso"][randint(0, 4)]} {content}")
+                else:
+                    bom -= 0.05
+                    await message.channel.send(commands.badimageClassificationResponse[randint(0, 8)])
+        except:
+            ruim += 0.1
+            if humorDoUsuario == "bom" or humorDoUsuario == "neutro":
+                await message.channel.send(commands.imageOperationsError["formal"][randint(0, 2)])
+            elif humorDoUsuario == "comico":
+                await message.channel.send(commands.imageOperationsError["coloquial"][randint(0, 2)])
+            else:
+                ruim += 0.2
+                await message.channel.send(commands.imageOperationsError["raivoso"][randint(0, 2)])
     
     # Está sessão deve semrpe estar aqui embaixo nesta ordem.
     cursor.execute(f"SELECT * FROM mind.debug_mode WHERE question='{mensagem}';")
@@ -163,23 +175,37 @@ async def on_message(message):
             await message.channel.send(learnedInfo[1])
 
     if message.content == "<Learning Mode: True" and message.author.name in commands.admin:
-        user = message.author.name
-        learning_mode = True
-        respondido = True
-        print("[SYSTEM] LEARNING MODE: True", user)
-        await message.channel.send("**[MODO DE APRENDIZADO ATIVADO]**")
-        await message.channel.send("**Question:** Mande um comando para o bot.")
-        await message.channel.send("**Response:** Mande a resposta para ser armazenada.")
-        await message.channel.send("**ContentType:** Mande o tom do conteúdo.")
-        await message.channel.send("Os três tipos serão melhor explicados durante a operação.")
+        if message.author.name in user:
+            await message.channel.send("**[MODO DE APRENDIZADO JÁ ATIVADO]**")
+        else:
+            user.append(message.author.name)
+            learning_mode = True
+            respondido = True
+            print("[SYSTEM] LEARNING MODE: True", user)
+            await message.channel.send("**[MODO DE APRENDIZADO ATIVADO]**")
+            await message.channel.send("**Question:** Mande um comando para o bot.")
+            await message.channel.send("**Response:** Mande a resposta para ser armazenada.")
+            await message.channel.send("**ContentType:** Mande o tom do conteúdo.")
+            await message.channel.send("Os três tipos serão melhor explicados durante a operação.")
     if message.content == "<Learning Mode: False" and message.author.name in commands.admin:
         await message.channel.send("**[MODO DE APRENDIZADO DESATIVADO]**")
         learning_mode = False
-        user = False
+        contentType = False
+        question = False
+        response = False
 
-    if learning_mode == True and not respondido and user == message.author.name:
+        user.remove(message.author.name)
+
+    if  (mensagem in commands.thanks or mensagem.split(" ")[1] in commands.thanks or mensagem.split(" ")[0] in commands.thanks) and message.author.name in thankUsers:
+        await message.channel.send("De nada.")
+        thankUsers.remove(message.author.name)
+    elif mensagem in commands.thanks or mensagem.split(" ")[1] in commands.thanks or mensagem.split(" ")[0] in commands.thanks:
+        await message.channel.send(commands.weirdThanksResponse[randint(0, 5)])
+    elif respondido == True and message.author.name not in thankUsers:
+        thankUsers.append(message.author.name)
+
+    if learning_mode == True and not respondido and message.author.name in user:
         question = mensagem
-        user = message.author.name
         await message.channel.send("RESPOSTA NÃO ENCONTRADA NO SISTEMA.")
         await message.channel.send("Por favor, envie a resposa mais adequada a este comando.")
         await message.channel.send(r"E utilize **%br%** no caso de duas mensagens ou mais como resposta.")

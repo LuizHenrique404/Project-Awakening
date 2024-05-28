@@ -69,6 +69,7 @@ def equilibroDePontos(bom: int, comico: int, ruim: int):
 admin = ("the_coder333", "linusdmarc", "m.luffy5404", "bondaismagic")
 
 # USER
+thanks = ("valeu", "obrigado", "brigado", "agradeço")
 greetings = ("ola", "oi", "opa", "saudacoes", "ei", "e ai", "fala", "salve", "iae", "coe", "aoba")
 greetingsComical = ("fala", "salve", "iae", "coe", "aoba")
 
@@ -78,7 +79,7 @@ imageClassificationCall = ("o que e isto", "do que a imagem se trata", "o que ta
                            "qual o objeto da imagem", "qual o objeto da foto", "me diga o objeto que esta na foto", "me diga o objeto que esta na imagem",
                            "me diga o objeto que esta aqui", "me fale o objeto que esta na imagem", "me fale o objeto que tem na imagem",
                             "me fale o objeto que tem na foto", "que objeto e este", "o que esta na imagem", "o que esta na foto",
-                            "o que e isso", "do que esta imagem se trata")
+                            "o que e isso", "do que esta imagem se trata", "do que essa imagem se trata")
 
 objectDetectionCall = ("me diga o voce ve", "me diga o que tem na imagem", "o que tem na imagem", "o que voce ve na imagem", 
                       "o que voce enxerga nessa imagem", "o que voce enxerga na imagem", "me diga o que voce enxerga", 
@@ -87,6 +88,8 @@ objectDetectionCall = ("me diga o voce ve", "me diga o que tem na imagem", "o qu
                       "me diga o que voce esta vendo", "me diga o que voce esta enxergando")
 
 # BOT
+weirdThanksResponse = ("De nada?", "Ok?", "Tá bom?", "De nada, eu acho.", "Certo?", "Beleza?") # 6
+
 greetingsCommonResponse = {"formal":["Olá.", "Olá!", ":robot: Saudações!", "Saudações", "Opa!", "Opa."], # 6
                            "coloquial": ["Salve!", "Fala.", "Lata. :dog:", "Aoba!", ":question:", "Iaí rapaz?"], # 6
                            "raivoso": ["Sim?", "O que foi?", "Qual o problema?", "Diga.", "Fale."]} # 5
@@ -107,10 +110,24 @@ lastInteractionResponseComical = {"Bastante tempo":["Olha ele aí, demorou mas v
                                     "Um tempinho":[":wave: Bom dia!", "Espero que o final de semana tenha sido massa. :disguised_face:", "Long time no see. :flag_us: :eagle:", 
                                                    "Hora de voltar a ação, capitão. :saluting_face:", "Good day man! :wave: :flag_us:"]} # 5
 
-imageClassificationResponse = {}
+imageClassificationResponse = {"formal":["Acredito que isso seja uma", "Pelo que eu entendi isso é uma", "De acordo com o que eu entendi, isso é uma", 
+                                         "Se eu entendi direito, isso é uma", "Espero não estar errado, mas acredito que isso seja uma",
+                                         "Pelo o que eu estou vendo, isso é uma", "Posso estar errado, mas acredito que seja uma",
+                                         "Da forma que eu entendi, acredito que seja uma", "Pelo que eu vi, isso é uma"], # 9
+                               "coloquial":["Rapaz, isso é uma", "Rapaz, pelo que eu tô intendendo isso é uma", ":rofl:  Isso é muito uma",
+                                            "Se pá isso é uma", "Do jeito que eu tô vendo, isso é claramente uma", r"Isso é 100% uma",
+                                            ":point_up::nerd::sweat_drops: De acordo com os meus cálculos isto é uma",
+                                            ":rolling_eyes: Claramente uma", "Você ainda pergunta? Isso é obviamente uma"], # 9
+                               "raivoso":["Sei lá. Talvez uma", "Uma", "Talvez uma", "Provavelmente uma", 
+                                          "Pelo que eu vi, uma", "Pelo que estou vendo, uma"]} # 5
+
+badimageClassificationResponse = ["Sei lá...", "Não me interessa.", "Não é problema meu.", 
+                                  "Você já sabe o que tem.", "Olhe para a imagem que você enviou e me diga.",
+                                  "De você, já sei que não vale a pena olhar.", "Não é como se eu me importasse o bastante para dizer.",
+                                  "Hmmm.", "Não se preocupe, não vou te dizer.", "Não tô muito afim de perder meu tempo com isso desta vez."] # 9
 
 # PREDICTION
-objectDetectionNames = ['chave-inglesa', 'tesoura', 'vassoura']
+objectDetectionNames = ['chave-inglesa.', 'tesoura.', 'vassoura.']
 
 imageOperationsError = {"formal":["Opa! Tem algo de errado, não consigo entender do que o arquivo em questão se trata. Para evitar erros como este anexe o arquivo de imagem a seu comando.",
                                  "Ops! Algo está errado, não estou conseguindo entender do que o arquivo se trata. Tente anexar um arquivo de imagem a seu comando.", 
