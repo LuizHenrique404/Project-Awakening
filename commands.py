@@ -16,7 +16,7 @@ def filtro(brutoDaFrase: str):
     
     filtoDaFrase = filtoDaFrase.replace(".", "").replace(",", "").replace(";", "")
     filtoDaFrase = filtoDaFrase.replace("^", "").replace("´", "").replace("'", "")
-    filtoDaFrase = filtoDaFrase.replace("!", "").replace("?", "")
+    filtoDaFrase = filtoDaFrase.replace("!", "").replace("?", "").replace("-", " ")
     filtoDaFrase = filtoDaFrase.replace("/", "").replace("<", "")
 
     return filtoDaFrase
@@ -73,7 +73,6 @@ thanks = ("valeu", "obrigado", "brigado", "agradeço")
 greetings = ("ola", "oi", "opa", "saudacoes", "ei", "e ai", "fala", "salve", "iae", "coe", "aoba")
 greetingsComical = ("fala", "salve", "iae", "coe", "aoba")
 
-# Ainda a se adicionar valores....
 imageClassificationCall = ("o que e isto", "do que a imagem se trata", "o que ta na imagem", "que isso", "que isso na imagem", "que isso na foto",
                            "que o objeto e esse", "qual e este objeto", "qual e esse objeto", "do que o objeto se trata", "o que o objeto e",
                            "qual o objeto da imagem", "qual o objeto da foto", "me diga o objeto que esta na foto", "me diga o objeto que esta na imagem",

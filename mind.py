@@ -34,8 +34,8 @@ class HumorClassification():
 
     def getHumor(self, pontos: dict):
         return self.model.predict([pontos])[0]
-    
-def imageClassification():    
+
+def imageClassification(): 
     image_width = 165
     image_height = 165
 

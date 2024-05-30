@@ -189,6 +189,7 @@ async def on_message(message):
             await message.channel.send("Os três tipos serão melhor explicados durante a operação.")
     if message.content == "<Learning Mode: False" and message.author.name in commands.admin:
         await message.channel.send("**[MODO DE APRENDIZADO DESATIVADO]**")
+        await message.channel.send("Todos os registros envolvendo questionamentos e respostas foram apagados.")
         learning_mode = False
         contentType = False
         question = False
@@ -198,6 +199,7 @@ async def on_message(message):
 
     if  (mensagem in commands.thanks or mensagem.split(" ")[1] in commands.thanks or mensagem.split(" ")[0] in commands.thanks) and message.author.name in thankUsers:
         await message.channel.send("De nada.")
+        respondido = True
         thankUsers.remove(message.author.name)
     elif mensagem in commands.thanks or mensagem.split(" ")[1] in commands.thanks or mensagem.split(" ")[0] in commands.thanks:
         await message.channel.send(commands.weirdThanksResponse[randint(0, 5)])
