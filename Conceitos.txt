@@ -33,3 +33,7 @@ _/Funções pré-definidas\______________
  O nivel de dificuldade será de acordo com a experiência do usuário.
 -Easter Eggs;
  Na sua maioria experimentais, apenas um extra.
+
+ _/Updates Futuros\___________________
+ -Resolução de Charadas;
+ -Localização de objetos em imagens.

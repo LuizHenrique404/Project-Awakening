@@ -1,24 +1,32 @@
-import tensorflow as tf
-import pandas as pd
-from os import path
-import numpy as np
+from bs4 import BeautifulSoup
+import mysql.connector
+import requests
 
-S = 'synthetic_datasets'
-M = 'MNIST'
-I = 'images'
+response = requests.get(f"https://www.dicio.com.br/bruh/")
+content = BeautifulSoup(response.content, "html.parser")
 
-train_df = pd.read_csv(path.join(S, M, 'training_data.csv'), header=None)
-columns = ['path', 'class_index', 'xmin', 'ymin', 'xmax', 'ymax']
+dictionaryResponse = content.find("div", attrs={"class":"title-header"})
+dictionaryResponse = dictionaryResponse.find("h1")
+dictionaryResponse = dictionaryResponse.text
 
-train_df.columns = columns
+if str(dictionaryResponse) == "Não encontrada":
+    print("Não encontrada")
+else:
+    print("Encontrada")
 
-test_df = pd.read_csv(path.join(S, M, 'test_data.csv'), header=None)
-test_df.columns = columns
+'''    Response = requests.get(U)
+    Content = BeautifulSoup(Response.content, "html.parser")
+        # v Will store all the html content of the products
+    Content = Content.find_all("div", attrs={"class":"ui-search-result__content-wrapper shops__result-content-wrapper"})
 
-t = 'MNIST_Converted_Training'
-train_df['path'] = train_df['path'].apply(lambda s: path.join(S, M, I, t, s))
+    for C in Content:       # v Will store the product title
+        Title = C.find("div", attrs={"class":"ui-search-item__group ui-search-item__group--title shops__items-group"}).h2
+        Price = C.find("span", attrs={"class":"price-tag-fraction"}) # < Will store the product price
 
-t = 'MNIST_Converted_Testing'
-test_df['path'] = test_df['path'].apply(lambda s: path.join(S, M, I, t, s))
-
-row1 = train_df.iloc[0].to_numpy().tolist()
+        if "Kingston" in str(Title.text) and Price:
+            try:
+                Data["Title"].append(str(Title.text).strip()) # < Will add the values
+                Data["Price"].append(float(Price.text))
+            except:
+                Data.update({"Title": [str(Title.text).strip()]}) # < Will create the values
+                Data.update({"Price": [float(Price.text)]})'''
