@@ -24,7 +24,6 @@ class getInfo():
         db_words = self.cursor.fetchall()
 
         if db_words:
-            self.cnx.close()
             return db_words[0][1]
         else:
             response = requests.get(f"https://www.dicio.com.br/{word}/")
@@ -35,7 +34,6 @@ class getInfo():
             dictionaryResponse = dictionaryResponse.text
 
             if str(dictionaryResponse) == "Não encontrada":
-                self.cnx.close()
                 return "Não encontrada"
             else:
                 wordMeaning = content.find("p", attrs={"class":"significado textonovo"})

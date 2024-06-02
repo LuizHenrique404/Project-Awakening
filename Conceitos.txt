@@ -35,5 +35,8 @@ _/Funções pré-definidas\______________
  Na sua maioria experimentais, apenas um extra.
 
  _/Updates Futuros\___________________
+ -Histórias aleatórias;
  -Resolução de Charadas;
+ -Adicionar batalha de rap;
+ -Modo de moderação avançada;
  -Localização de objetos em imagens.

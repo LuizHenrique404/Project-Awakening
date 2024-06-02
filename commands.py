@@ -111,9 +111,11 @@ wordMeaningCall = ("o que esta palavra significa", "o que essa palavra significa
                    "que significado esta palavra tem", "qual o significado de", "significado de", "me diga o significado da palavra")
 
 cryptoCurrencyCall = ("qual o valor da moeda", "qual o valor dessa moeda", "qual o valor desta moeda", "valor do", "valor da", "qual o valor destas moedas",
-                      "qual o valor dessas moedas", "me diga o valor da moeda", "me diga o valor dessa moeda", "me diga o valor desta moeda",
+                      "qual o valor dessas moedas", "me diga o valor da moeda", "me diga o valor dessa moeda", "me diga o valor desta moeda", "qual o valor atual da"
                       "me diga o valor das moedas", "me diga o valor destas moedas", "me diga o valor dessas moedas", "qual o valor das moedas",
-                      "que valor tem as modeas", "que valor tem a moeda", "qual valor tem essas moedas", "valor de")
+                      "que valor tem as modeas", "que valor tem a moeda", "qual valor tem essas moedas", "valor de", "qual o valor do", "qual o valor atual do"
+                      "qual o valor da", "qual o valor de", "qual o valor atual de", "qual o valor atual da moeda", "qual o valor atual desta moeda",
+                      "qual o valor atual dessa moeda", "qual o valor atual destas moedas", "qual o valor atual dessas moedas", "qual o valor atual das moedas")
 
 # BOT
 weirdThanksResponse = ("De nada?", "Ok?", "Tá bom?", "De nada, eu acho.", "Certo?", "Beleza?") # 6
@@ -174,4 +176,3 @@ imageOperationsError = {"formal":["Opa! Tem algo de errado, não consigo entende
                         "raivoso":["Como eu deveria interpretar isso? Mande um anexo de imagem, se quiser que eu te diga algo.", 
                                    "Tá errado, tá tudo errado. Você não se deu ao trabalho de me enviar o arquivo de imagem direito, se é que você fez isso. Mande anexado ao comando.",
                                    "Sim, certo. Sabe o que eu vejo? Absolutamente nada! Mande a imagem anexada a seu comando, e talvez eu te diga o que tem nela."]}
-

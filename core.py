@@ -170,10 +170,10 @@ async def on_message(message):
                     await message.channel.send(meanings)
             else:
                 await message.channel.send(result)
+            await message.channel.send("**Resposta finalizada...**")
 
     if mensagem.split(":")[0] in commands.cryptoCurrencyCall:
         respondido = True
-
         coins = mensagem.split(":")[1]
         coins = coins[1:].replace(" ", "-").split("/")
 
@@ -201,11 +201,21 @@ async def on_message(message):
                     await message.channel.send(f"**o-** Valor antigo da moeda: ${oldInfo[1]}")
                     await message.channel.send(f"**o-** Valor antigo de mercado: ${oldInfo[2]}")
                     await message.channel.send(f"**o-** Volume antigo: ${oldInfo[3]}")
-                    await message.channel.send("-")
-                    await message.channel.send("Comparação do valor antigo com o atual:", float(info[1]) - float(oldInfo[1]))
-                
-                cursor.execute(f"INSERT INTO mind.crypto (coinName, Value, Volume, MarketCap) VALUES ('{info[0]}', '{info[1]}', '{info[2]}', '{info[3]}');")
-                cnx.commit()
+                    
+                    valorAtual = info[1].replace(".", "").replace(",", ".")
+                    valorAntigo = oldInfo[1].replace(".", "").replace(",", ".")
+                    comparacao = float(valorAtual) - float(valorAntigo)
+
+                    if comparacao > 1 or  comparacao < -1:
+                        await message.channel.send("-")
+                        await message.channel.send(f"Comparação do valor antigo com o atual: {comparacao}")
+                try:
+                    cursor.execute(f"INSERT INTO mind.crypto (coinName, Value, Volume, MarketCap) VALUES ('{info[0]}', '{info[1]}', '{info[2]}', '{info[3]}');")
+                    cnx.commit()
+                except:
+                    cursor.execute(f"UPDATE mind.crypto SET Value = '{info[1]}', Volume = '{info[2]}', MarketCap = '{info[3]}' WHERE (coinName = '{info[0]}');")
+                    cnx.commit()
+        await message.channel.send("**Resposta finalizada...**")
 
     if mensagem in commands.imageClassificationCall:
         respondido = True
@@ -301,11 +311,11 @@ async def on_message(message):
 
         user[0].remove(message.author.name)
 
-    if  (mensagem.split(" ")[1] in commands.thanks or mensagem.split(" ")[0] in commands.thanks) and message.author.name in thankUsers:
+    if  (mensagem.split(" ")[0] in commands.thanks or mensagem.split(" ")[1] in commands.thanks) and message.author.name in thankUsers:
         await message.channel.send("De nada.")
         respondido = True
         thankUsers.remove(message.author.name)
-    elif mensagem.split(" ")[1] in commands.thanks or mensagem.split(" ")[0] in commands.thanks:
+    elif mensagem.split(" ")[0] in commands.thanks or mensagem.split(" ")[1] in commands.thanks:
         ruim += 0.05
         await message.channel.send(commands.weirdThanksResponse[randint(0, 5)])
     elif respondido == True and message.author.name not in thankUsers:
@@ -320,6 +330,7 @@ async def on_message(message):
         await message.channel.send(r"Seria o equivalente a: "r"Provavelmente não...%br%Mas talvez tenha.")
 
     bom, comico, ruim = commands.equilibroDePontos(bom, comico, ruim)
+
     cursor.execute(f"UPDATE mind.users_info SET bom={bom}, comico={comico}, ruim={ruim}, ultima_interação='{datetime.now().date()}' WHERE username='{usuarioReconhecido[0][0]}'")
     cnx.commit()
     cnx.close()
