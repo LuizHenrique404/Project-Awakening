@@ -104,20 +104,55 @@ async def on_message(message):
         humorDoUsuario = userHumor.getHumor(pontos=(usuarioReconhecido[0][1], usuarioReconhecido[0][2], usuarioReconhecido[0][3]))
     else:
         respondido = True
+        if mensagem.split(" ")[0] in commands.greetingsComical:
+            bom += 0.05
+            comico += 0.2
+
         usuarioReconhecido = ([message.author.name.lower(), 0, 0, 0, datetime.now().date()], 1) # 6 Itens
         await message.channel.send(commands.greetingsResponseUnknown["cumprimento"][randint(0, 2)])
         sleep(0.5)
         await message.channel.send(commands.greetingsResponseUnknown["apresentação"][randint(0, 4)])
         if mensagem.split(" ")[0] not in commands.greetings:
-            if mensagem.split(" ")[0] in commands.greetingsComical:
-                bom += 0.05
-                comico += 0.2
+            respondido = False
             sleep(0.7)
             await message.channel.send(commands.greetingsResponseUnknown["continuação"][randint(0, 4)])
+        bom += 0.1
         cursor.execute(f"INSERT INTO mind.users_info (username, bom, comico, ruim, ultima_interação) VALUES ('{usuarioReconhecido[0][0]}', 0, 0, 0, '{usuarioReconhecido[0][4]}')")
         cnx.commit()
         sleep(0.7)
     
+    if mensagem.split(" ")[0] == "help":
+        respondido = True
+        sleep(0.5)
+        await message.channel.send("**[COMANDOS DO SISTEMA]**")
+        await message.channel.send("Para poder realizar um comando, você sempre deve utilizar o caractere **<** no começo do comando.")
+        sleep(0.5)
+        await message.channel.send(file=discord.File("Bot_Media\\cmd-command.gif"))
+        await message.channel.send("O mesmo comando pode ser escrito de diferentes maneiras, contanto que esteja escrita de maneira correta, o bot conseguirá ler e interpretar normalmente.")
+        sleep(0.5)
+        await message.channel.send("**<Saudação** - Cummprimentar o Bot.")
+        await message.channel.send(".  Exemplo: <Olá")
+        sleep(0.2)
+        await message.channel.send("**<Agradecimento** - Agradecer ao Bot por alguma ação.")
+        await message.channel.send(".  Exemplo: <Obrigado")
+        sleep(0.2)
+        await message.channel.send("**<Questionamento de classificação** - Classificação de uma imagem.")
+        await message.channel.send(".  Exemplo: <Do que a imagem se trata?")
+        sleep(0.2)
+        await message.channel.send("**<Questionamento de significado** - Descrição de significado de palavras.")
+        await message.channel.send(".  Exemplo: <O que significa: Palavra?")
+        sleep(0.2)
+        await message.channel.send("**<Questionamento de valor** - Descrição do valor da criptomoeda.")
+        await message.channel.send(".  Exemplo: <Qual o valor atual do: Bitcoin?")
+        
+        await message.channel.send("**[COMANDOS GERAIS]**")
+        await message.channel.send("**[**Os comandos gerais, são comandos que não foram predefinidos diretamente no sistema, tendo sido imputados por outros usuários durante modo de aprendizado.")
+        await message.channel.send(file=discord.File("Bot_Media\\order-complexity.gif"))
+        sleep(0.5)
+        await message.channel.send("**[**Então não há uma maneira especifica de listar cada um, e sua finalidade, já que são comandos com respostas simples.")
+        await message.channel.send("Um exemplo sendo: <The cake is a lie")
+        await message.channel.send("**Resposta finalizada.**")
+
 
     
     if mensagem.split(" ")[0] in commands.greetings and respondido == False:
@@ -181,7 +216,7 @@ async def on_message(message):
                         continue
             else:
                 await message.channel.send(result)
-            await message.channel.send("**Resposta finalizada...**")
+            await message.channel.send("**Resposta finalizada.**")
 
     if mensagem.split(":")[0] in commands.cryptoCurrencyCall:
         respondido = True
@@ -226,7 +261,7 @@ async def on_message(message):
                 except:
                     cursor.execute(f"UPDATE mind.crypto SET Value = '{info[1]}', Volume = '{info[2]}', MarketCap = '{info[3]}' WHERE (coinName = '{info[0]}');")
                     cnx.commit()
-        await message.channel.send("**Resposta finalizada...**")
+        await message.channel.send("**Resposta finalizada.**")
 
     if mensagem in commands.imageClassificationCall:
         respondido = True
@@ -272,7 +307,7 @@ async def on_message(message):
     
     # Está sessão deve semrpe estar aqui embaixo nesta ordem.
     try:
-        cursor.execute(f"SELECT * FROM mind.debug_mode WHERE question='{mensagem}';")
+        cursor.execute(f"SELECT * FROM mind.learning_mode WHERE question='{mensagem}';")
         learnedInfo = cursor.fetchall()
     except:
         learnedInfo = False
@@ -353,7 +388,7 @@ async def on_message(message):
 
     bom, comico, ruim = commands.equilibroDePontos(bom, comico, ruim)
 
-    print("[Devatron] Process finished")
+    print("[Devatron] FIM DO PROCESSO")
     cursor.execute(f"UPDATE mind.users_info SET bom={bom}, comico={comico}, ruim={ruim}, ultima_interação='{datetime.now().date()}' WHERE username='{usuarioReconhecido[0][0]}'")
     cnx.commit()
     cnx.close()

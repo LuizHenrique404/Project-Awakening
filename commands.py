@@ -27,7 +27,7 @@ def armazenamentoDeComandos(contentType: str, question: str, response: str):
     cursor = cnx.cursor()
     question = filtro(question)
 
-    cursor.execute(f"INSERT INTO mind.debug_mode (question, response, content) VALUES ('{question}', '{response}', '{contentType}');")
+    cursor.execute(f"INSERT INTO mind.learning_mode (question, response, content) VALUES ('{question}', '{response}', '{contentType}');")
     cnx.commit()
     cnx.close()
 
