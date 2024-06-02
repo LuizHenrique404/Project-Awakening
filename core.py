@@ -9,7 +9,13 @@ import mysql.connector
 import requests
 import discord
 
-# ADICIONAR UM MODO DE MODERADOR. (COM PORSONALIZAÇÃO DE OPRAÇÕES)
+
+# ULTIMAS ATUALIZAÇÕES
+# -OTIMIZAR AS OPERAÇÕES
+# -CHECAGEM FLEXIBILIDADE DAS INTERAÇÕES
+# -CHECAGEM NA IMPORTÂNCIA E REAÇÃO DOS PONTOS
+# -AUMENTAR A PRECISÃO DA CLASSIFICAÇÃO DAS IMAGENS
+
 botToken = "MTIxNjgxNjU4Mjg0MDU0OTM4Nw.GVIJ51.8ejBZn4DTaqWilXrUbEAyuO3WG4DSkxtNhLZXk"
 
 intents = discord.Intents.default()
@@ -108,9 +114,6 @@ async def on_message(message):
         cursor.execute(f"INSERT INTO mind.users_info (username, bom, comico, ruim, ultima_interação) VALUES ('{usuarioReconhecido[0][0]}', 0, 0, 0, '{usuarioReconhecido[0][4]}')")
         cnx.commit()
         sleep(0.7)
-
-    # Adicionar um fator batalha de rap.
-    # Adicionar fator histórias aleatórias.
     
     if mensagem.split(" ")[0] in commands.greetings:
         respondido = True
