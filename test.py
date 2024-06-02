@@ -28,7 +28,7 @@ model = Sequential([layers.Rescaling(1./255), layers.Conv2D(16, 3, padding='same
 
 # 1º Para operação com grandes informações
 model.compile(optimizer="adam", loss=losses.SparseCategoricalCrossentropy(from_logits=True), metrics=["accuracy"])
-model.fit(data_train, validation_data=data_validation, epochs=15)
+model.fit(data_train, validation_data=data_validation, epochs=20)
 model.save("Machine_Learning\\imageClassificationFolder\\imageClassification.keras")
 
 print(model.history.history['val_accuracy'])
