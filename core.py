@@ -1,4 +1,5 @@
 import commands
+import coleta
 import mind
 
 from datetime import datetime
@@ -8,6 +9,7 @@ import mysql.connector
 import requests
 import discord
 
+# ADICIONAR UM MODO DE MODERADOR. (COM PORSONALIZAÇÃO DE OPRAÇÕES)
 botToken = "MTIxNjgxNjU4Mjg0MDU0OTM4Nw.GVIJ51.8ejBZn4DTaqWilXrUbEAyuO3WG4DSkxtNhLZXk"
 
 intents = discord.Intents.default()
@@ -17,9 +19,10 @@ learning_mode = False
 contentType = False
 question = False
 response = False
+word = False
 
 thankUsers = list()
-user = list()
+user = [[],[]]
 
 client = discord.Client(intents=intents)
 
@@ -29,7 +32,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    global learning_mode, contentType, question, response, user
+    global learning_mode, contentType, question, response, user, word
     usuarioReconhecido = False
     humorDoUsuario = "neutro"
     respondido = False
@@ -38,8 +41,23 @@ async def on_message(message):
     ruim = 0
 
     print(f"[{message.author.name}] {message.content}")
-    if message.author == client.user or message.content[0] != "<":
-        if message.author.name in user and response:
+    if message.author == client.user or message.content[0] != "<" or ruim >= 9.5:
+        if message.author.name in user[1]:
+            meaning = str(message.content)
+
+            cnx = mysql.connector.connect(user='root', password='pass334', host='localhost', database='mind')
+            cursor = cnx.cursor()
+
+            cursor.execute(f"INSERT INTO mind.dictionary (palavra, significado) VALUES ('{word}', '{meaning}');")
+            cnx.commit()
+            cnx.close()
+
+            await message.channel.send("SIGNIFICADO DE PALAVRA REGISTRADO.")
+            user[1].remove(message.author.name)
+            word = False
+            return
+
+        if message.author.name in user[0] and response:
             if message.content in ("formal", "comico", "ruim", "neutro"):
                 contentType = message.content
                 commands.armazenamentoDeComandos(contentType, question, response)
@@ -51,7 +69,7 @@ async def on_message(message):
             else:
                 await message.channel.send("O tom do conteúdo informado deve ser um dos três já citados. (formal, comico, ruim, neutro)")
             return
-        elif message.author.name in user and question:
+        elif message.author.name in user[0] and question:
             response = message.content
 
             await message.channel.send("RESPOSTA REGISTRADA.")
@@ -62,6 +80,7 @@ async def on_message(message):
             return
     
     mensagem = commands.filtro(message.content)
+    print(mensagem.split(" ")[0])
     cnx = mysql.connector.connect(user='root', password='pass334', host='localhost', database='mind')
     cursor = cnx.cursor()
 
@@ -104,17 +123,89 @@ async def on_message(message):
             if humorDoUsuario == "bom" or humorDoUsuario == "neutro":
                 await message.channel.send(commands.greetingsCommonResponse["formal"][randint(0, 5)])
                 try:
+                    sleep(0.5)
                     await message.channel.send(commands.lastInteractionResponse[resultado][randint(0, 2)])
                 except:
                     pass
             elif humorDoUsuario == "comico":
                 await message.channel.send(commands.greetingsCommonResponse["coloquial"][randint(0, 5)])
                 try:
+                    sleep(0.5)
                     await message.channel.send(commands.lastInteractionResponseComical[resultado][randint(0, 5)])
                 except:
                     pass
             else:
-                await message.channel.send(commands.greetingsCommonResponse["raivoso"][randint(0, 4)]) 
+                await message.channel.send(commands.greetingsCommonResponse["raivoso"][randint(0, 4)])
+
+    if mensagem.split(":")[0] in commands.wordMeaningCall:
+        respondido = True
+
+        getWord = coleta.getInfo(cursor, cnx)
+        word = mensagem.split(":")[1].replace(" ", "").lower()
+        print(word)
+
+        result = getWord.dictionary(word)
+        if result == "Não encontrada":
+            if learning_mode == True:
+                user[1].append(message.author.name)
+
+                await message.channel.send("SIGNIFICADO NÃO ENCONTRADO.")
+                await message.channel.send("Por favor informe qual seria a resposta mais adequada.")
+                await message.channel.send(r"Lembre-se de fazer a separação de mensagens utilizando %br%")
+                await message.channel.send(r"Exemplo: Talvez%br%Seja")
+                await message.channel.send("Talvez")
+                await message.channel.send("Seja")
+            else:
+                if humorDoUsuario == "bom" or humorDoUsuario == "neutro":
+                    await message.channel.send(commands.wordMeaningError["formal"][randint(0, 3)])
+                elif humorDoUsuario == "comico":
+                    await message.channel.send(commands.wordMeaningError["coloquial"][randint(0, 3)])
+                else:
+                    await message.channel.send(commands.wordMeaningError["raivoso"][randint(0, 3)])
+        else:
+            if r"%br%" in result:
+                wordSeparateResponse = result.split(r"%br%")
+
+                for meanings in wordSeparateResponse:
+                    await message.channel.send(meanings)
+            else:
+                await message.channel.send(result)
+
+    if mensagem.split(":")[0] in commands.cryptoCurrencyCall:
+        respondido = True
+
+        coins = mensagem.split(":")[1]
+        coins = coins[1:].replace(" ", "-").split("/")
+
+        allInfo = coleta.getInfo(cursor, cnx)
+        allInfo = allInfo.cryptoCurrency(coins)
+
+        for info in allInfo:
+            if info[0] == "Não encontrada":
+                ruim += 0.2
+                await message.channel.send(f"Não foram encontradas informações sobre {info[1]}...")
+            else:
+                cursor.execute(f"SELECT * FROM mind.crypto WHERE coinName='{info[0]}';")
+                oldInfo = cursor.fetchall()
+
+                sleep(0.5)
+                await message.channel.send(f"**[Informações sobre {info[0]} no mercado]**")
+                await message.channel.send(f"**o-** Valor da moeda atualmente: ${info[1]}")
+                await message.channel.send(f"**o-** Valor de mercado atualmente: ${info[2]}")
+                await message.channel.send(f"**o-** Volume atual: ${info[3]}")
+
+                if oldInfo:
+                    oldInfo = oldInfo[0]
+                    sleep(0.5)
+                    await message.channel.send("-")
+                    await message.channel.send(f"**o-** Valor antigo da moeda: ${oldInfo[1]}")
+                    await message.channel.send(f"**o-** Valor antigo de mercado: ${oldInfo[2]}")
+                    await message.channel.send(f"**o-** Volume antigo: ${oldInfo[3]}")
+                    await message.channel.send("-")
+                    await message.channel.send("Comparação do valor antigo com o atual:", float(info[1]) - float(oldInfo[1]))
+                
+                cursor.execute(f"INSERT INTO mind.crypto (coinName, Value, Volume, MarketCap) VALUES ('{info[0]}', '{info[1]}', '{info[2]}', '{info[3]}');")
+                cnx.commit()
 
     if mensagem in commands.imageClassificationCall:
         respondido = True
@@ -130,7 +221,17 @@ async def on_message(message):
             bom += 0.05
             if humorDoUsuario == "bom" or humorDoUsuario == "neutro":
                 await message.channel.send(f"{commands.imageClassificationResponse["formal"][randint(0, 8)]} {content}")
+                try:
+                    sleep(0.5)
+                    await message.channel.send(commands.lastInteractionResponse[resultado][randint(0, 2)])
+                except:
+                    pass
             elif humorDoUsuario == "comico":
+                try:
+                    sleep(0.5)
+                    await message.channel.send(commands.lastInteractionResponse[resultado][randint(0, 2)])
+                except:
+                    pass
                 await message.channel.send(f"{commands.imageClassificationResponse["coloquial"][randint(0, 8)]} {content}")
             else:
                 if randint(1, 3) == 1:
@@ -149,8 +250,11 @@ async def on_message(message):
                 await message.channel.send(commands.imageOperationsError["raivoso"][randint(0, 2)])
     
     # Está sessão deve semrpe estar aqui embaixo nesta ordem.
-    cursor.execute(f"SELECT * FROM mind.debug_mode WHERE question='{mensagem}';")
-    learnedInfo = cursor.fetchall()
+    try:
+        cursor.execute(f"SELECT * FROM mind.debug_mode WHERE question='{mensagem}';")
+        learnedInfo = cursor.fetchall()
+    except:
+        learnedInfo = False
 
     if learnedInfo:
         # 0 - Question 1 - Response 2 - ContentType
@@ -175,10 +279,10 @@ async def on_message(message):
             await message.channel.send(learnedInfo[1])
 
     if message.content == "<Learning Mode: True" and message.author.name in commands.admin:
-        if message.author.name in user:
+        if message.author.name in user[0] or message.author.name in user[1]:
             await message.channel.send("**[MODO DE APRENDIZADO JÁ ATIVADO]**")
         else:
-            user.append(message.author.name)
+            user[0].append(message.author.name)
             learning_mode = True
             respondido = True
             print("[SYSTEM] LEARNING MODE: True", user)
@@ -195,18 +299,19 @@ async def on_message(message):
         question = False
         response = False
 
-        user.remove(message.author.name)
+        user[0].remove(message.author.name)
 
-    if  (mensagem in commands.thanks or mensagem.split(" ")[1] in commands.thanks or mensagem.split(" ")[0] in commands.thanks) and message.author.name in thankUsers:
+    if  (mensagem.split(" ")[1] in commands.thanks or mensagem.split(" ")[0] in commands.thanks) and message.author.name in thankUsers:
         await message.channel.send("De nada.")
         respondido = True
         thankUsers.remove(message.author.name)
-    elif mensagem in commands.thanks or mensagem.split(" ")[1] in commands.thanks or mensagem.split(" ")[0] in commands.thanks:
+    elif mensagem.split(" ")[1] in commands.thanks or mensagem.split(" ")[0] in commands.thanks:
+        ruim += 0.05
         await message.channel.send(commands.weirdThanksResponse[randint(0, 5)])
     elif respondido == True and message.author.name not in thankUsers:
         thankUsers.append(message.author.name)
 
-    if learning_mode == True and not respondido and message.author.name in user:
+    if learning_mode == True and not respondido and message.author.name in user[0]:
         question = mensagem
         await message.channel.send("RESPOSTA NÃO ENCONTRADA NO SISTEMA.")
         await message.channel.send("Por favor, envie a resposa mais adequada a este comando.")

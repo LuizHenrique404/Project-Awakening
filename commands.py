@@ -3,6 +3,7 @@
 
 from datetime import datetime
 import mysql.connector
+import requests
 
 def filtro(brutoDaFrase: str):
 
@@ -63,13 +64,34 @@ def equilibroDePontos(bom: int, comico: int, ruim: int):
 
     return (bom, comico, ruim)
 
+def filtroDicionario(wordMeaning):
+    botmessage = str()
+    meaning = False
+
+    for meanings in wordMeaning:
+        if meanings.text != " " and meaning != meanings.text:
+            counter = 0
+            for char in meanings.text:
+                if char != " ":
+                    break
+                
+                counter += 1
+            botmessage += meanings.text[counter:] + r"/505/%br%"
+            
+            meaning = meanings.text
+    botmessage = botmessage.split("/505/")
+    botmessage[0] = "**" + botmessage[0].upper() + "**"
+    botmessage = ''.join(botmessage)
+    return botmessage[:-4]
+
+
 # ADICIONAR UM FATOR DE ARMAZENAMENTO DE PERGUNTAS E RESPOSTAS NO DATABASE.
 
 # AUTHORIZATION
 admin = ("the_coder333", "linusdmarc", "m.luffy5404", "bondaismagic")
 
 # USER
-thanks = ("valeu", "obrigado", "brigado", "agradeço")
+thanks = ("valeu", "obrigado", "brigado", "agradeco", "brigada", "obrigada", "obrigadao")
 greetings = ("ola", "oi", "opa", "saudacoes", "ei", "e ai", "fala", "salve", "iae", "coe", "aoba")
 greetingsComical = ("fala", "salve", "iae", "coe", "aoba")
 
@@ -80,11 +102,18 @@ imageClassificationCall = ("o que e isto", "do que a imagem se trata", "o que ta
                             "me fale o objeto que tem na foto", "que objeto e este", "o que esta na imagem", "o que esta na foto",
                             "o que e isso", "do que esta imagem se trata", "do que essa imagem se trata")
 
-objectDetectionCall = ("me diga o voce ve", "me diga o que tem na imagem", "o que tem na imagem", "o que voce ve na imagem", 
-                      "o que voce enxerga nessa imagem", "o que voce enxerga na imagem", "me diga o que voce enxerga", 
-                      "o que voce enxerga aqui", "o que voce ve aqui", "o que voce ve nessa imagem", "o que tem aqui",
-                      "o que tem nessa imagem", "me fale o que voce ve", "me fale o que tem na imagem", "me fale o que voce enxerga",
-                      "me diga o que voce esta vendo", "me diga o que voce esta enxergando")
+wordMeaningCall = ("o que esta palavra significa", "o que essa palavra significa", "qual o significado dessa palavra", "qual o significado desta palavra",
+                   "me diga qual o significado desta palavra", "me diga qual o singificado da palavra", "me diga qual o significado dessa palavra",
+                   "qual o significado da palavra", "me diz o significado da palavra", "me diz o significado dessa palavra", "me diz o significado desta palavra",
+                   "me diz qual o significado dessa palavra", "me diz qual o significado desta palavra", "me diz qual o significado da palavra",
+                   "fale qual o fignificado da palavra", "fale qual o fignificado desta palavra", "fale qual o fignificado dessa palavra", "significado de",
+                   "qual o significado que essa palavra tem", "qual o significado que esta palavra tem", "que significado essa palavra tem",
+                   "que significado esta palavra tem", "qual o significado de", "significado de", "me diga o significado da palavra")
+
+cryptoCurrencyCall = ("qual o valor da moeda", "qual o valor dessa moeda", "qual o valor desta moeda", "valor do", "valor da", "qual o valor destas moedas",
+                      "qual o valor dessas moedas", "me diga o valor da moeda", "me diga o valor dessa moeda", "me diga o valor desta moeda",
+                      "me diga o valor das moedas", "me diga o valor destas moedas", "me diga o valor dessas moedas", "qual o valor das moedas",
+                      "que valor tem as modeas", "que valor tem a moeda", "qual valor tem essas moedas", "valor de")
 
 # BOT
 weirdThanksResponse = ("De nada?", "Ok?", "Tá bom?", "De nada, eu acho.", "Certo?", "Beleza?") # 6
@@ -98,6 +127,14 @@ greetingsResponseUnknown = {"cumprimento":["Olá", "Saudações!", "Opa!"], # 3
                             "Eu sou Devatron.", "Eu sou Devatron, Devatron sou eu.", "Eu sou uma IA de teste, chamado de Devatron!"], # 6
                             "cintinuação": ["Dando continuidade as tarefas...", "Continuando...", "Seguindo...", 
                             "Continuando com o que estavamos fazendo...", "Dando continuidade a nossas tarefas..."]} # 5
+
+wordMeaningError = {"formal":["Lamento, mas não consegui encontrar um sentido para esta palavra.", 
+                              "Esta palavra e seu respectivo sentido significado não estão registrados em meus sistemas.",
+                              "Não consegui encontrar um significado para esta palavra.", "Não fui capaz de encontrar um significado para esta palavra"], # 4
+                    "coloquial":["Eu não faço a menor ideia do sentido por trás dessa palavra.", "Eu não sei. Eu não entendi. Isso não tá registrado em meus sistemas.",
+                                 "Eu simplesmente não sei, isso não tá registrado em meus sistemas", "Eu também gostaria de saber qual o significado dessa palavra. :sob:"], # 4
+                    "raivoso":["Sei lá. Isso não esta registrado.", "Como eu deveria saber? Isso não foi registrado.", 
+                               "Eu não sei. Não há registros disso.", "Eu sei lá. Esta palavra e seu significado não foram registrados."]} # 4
 
 lastInteractionResponse = {"Bastante tempo":["A quanto tempo que não nos falamos.", "Nossa, já faz mais de um ano.", "Depois de um ano, ele voltou."], # 3
                            "Um bom tempo":["Faz um certo tempo que você não aparece.", "A quanto tempo. :face_with_monocle:", "A quanto tempo heim. :face_with_raised_eyebrow:"], # 3
@@ -137,3 +174,4 @@ imageOperationsError = {"formal":["Opa! Tem algo de errado, não consigo entende
                         "raivoso":["Como eu deveria interpretar isso? Mande um anexo de imagem, se quiser que eu te diga algo.", 
                                    "Tá errado, tá tudo errado. Você não se deu ao trabalho de me enviar o arquivo de imagem direito, se é que você fez isso. Mande anexado ao comando.",
                                    "Sim, certo. Sabe o que eu vejo? Absolutamente nada! Mande a imagem anexada a seu comando, e talvez eu te diga o que tem nela."]}
+
