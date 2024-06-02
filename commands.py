@@ -18,7 +18,7 @@ def filtro(brutoDaFrase: str):
     filtoDaFrase = filtoDaFrase.replace(".", "").replace(",", "").replace(";", "")
     filtoDaFrase = filtoDaFrase.replace("^", "").replace("´", "").replace("'", "")
     filtoDaFrase = filtoDaFrase.replace("!", "").replace("?", "").replace("-", " ")
-    filtoDaFrase = filtoDaFrase.replace("/", "").replace("<", "")
+    filtoDaFrase = filtoDaFrase.replace("/", "").replace("<", "").replace("#", "")
 
     return filtoDaFrase
 
@@ -91,7 +91,7 @@ def filtroDicionario(wordMeaning):
 admin = ("the_coder333", "linusdmarc", "m.luffy5404", "bondaismagic")
 
 # USER
-thanks = ("valeu", "obrigado", "brigado", "agradeco", "brigada", "obrigada", "obrigadao")
+thanks = ("valeu", "obrigado", "brigado", "agradeco", "brigada", "obrigada", "obrigadao", "agradecida", "agradecido")
 greetings = ("ola", "oi", "opa", "saudacoes", "ei", "e ai", "fala", "salve", "iae", "coe", "aoba")
 greetingsComical = ("fala", "salve", "iae", "coe", "aoba")
 
@@ -111,23 +111,27 @@ wordMeaningCall = ("o que esta palavra significa", "o que essa palavra significa
                    "que significado esta palavra tem", "qual o significado de", "significado de", "me diga o significado da palavra")
 
 cryptoCurrencyCall = ("qual o valor da moeda", "qual o valor dessa moeda", "qual o valor desta moeda", "valor do", "valor da", "qual o valor destas moedas",
-                      "qual o valor dessas moedas", "me diga o valor da moeda", "me diga o valor dessa moeda", "me diga o valor desta moeda", "qual o valor atual da"
-                      "me diga o valor das moedas", "me diga o valor destas moedas", "me diga o valor dessas moedas", "qual o valor das moedas",
-                      "que valor tem as modeas", "que valor tem a moeda", "qual valor tem essas moedas", "valor de", "qual o valor do", "qual o valor atual do"
-                      "qual o valor da", "qual o valor de", "qual o valor atual de", "qual o valor atual da moeda", "qual o valor atual desta moeda",
+                      "qual o valor dessas moedas", "me diga o valor da moeda", "me diga o valor dessa moeda", "me diga o valor desta moeda", "qual o valor atual da",
+                      "me diga o valor das moedas", "me diga o valor destas moedas", "me diga o valor dessas moedas", "qual o valor das moedas", "valor atual do"
+                      "que valor tem as modeas", "que valor tem a moeda", "qual valor tem essas moedas", "valor de", "qual o valor do", "qual o valor atual do",
+                      "qual o valor da", "qual o valor de", "qual o valor atual de", "qual o valor atual da moeda", "qual o valor atual desta moeda", "valor atual de"
                       "qual o valor atual dessa moeda", "qual o valor atual destas moedas", "qual o valor atual dessas moedas", "qual o valor atual das moedas")
 
 # BOT
 weirdThanksResponse = ("De nada?", "Ok?", "Tá bom?", "De nada, eu acho.", "Certo?", "Beleza?") # 6
 
+thankResponse = {"formal":["De nada.", "Tranquilo.", "De nada cara. :slight_smile:", "De boa."], # 4
+                 "coloquial":["Tá de boa.", "De boa rapaz.", "É nois. :unamused: :call_me::call_me:", ":unamused: :call_me::call_me:"], # 4
+                 "raivoso":["Tá.", "Certo.", "Ok.", "Hmm."]} # 4
+
 greetingsCommonResponse = {"formal":["Olá.", "Olá!", ":robot: Saudações!", "Saudações", "Opa!", "Opa."], # 6
                            "coloquial": ["Salve!", "Fala.", "Lata. :dog:", "Aoba!", ":question:", "Iaí rapaz?"], # 6
                            "raivoso": ["Sim?", "O que foi?", "Qual o problema?", "Diga.", "Fale."]} # 5
-greetingsResponseUnknown = {"cumprimento":["Olá", "Saudações!", "Opa!"], # 3
+greetingsResponseUnknown = {"cumprimento":["Saudações!", "Opa!", "Olá"], # 3
                             "apresentação":["Meu nome é Devatron, sou um BOT do discord, mas eu opero além do discord.", 
-                            "Eu sou o Devatron, sou uma IA de teste capaz de realizar diversas funções.", "Meu nome é Devatron.", 
+                            "Meu nome é Devatron.", "Eu sou o Devatron, sou uma IA de teste capaz de realizar diversas funções.", 
                             "Eu sou Devatron.", "Eu sou Devatron, Devatron sou eu.", "Eu sou uma IA de teste, chamado de Devatron!"], # 6
-                            "cintinuação": ["Dando continuidade as tarefas...", "Continuando...", "Seguindo...", 
+                            "continuação": ["Dando continuidade as tarefas...", "Continuando...", "Seguindo...", 
                             "Continuando com o que estavamos fazendo...", "Dando continuidade a nossas tarefas..."]} # 5
 
 wordMeaningError = {"formal":["Lamento, mas não consegui encontrar um sentido para esta palavra.", 

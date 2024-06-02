@@ -109,13 +109,18 @@ async def on_message(message):
         sleep(0.5)
         await message.channel.send(commands.greetingsResponseUnknown["apresentação"][randint(0, 4)])
         if mensagem.split(" ")[0] not in commands.greetings:
+            if mensagem.split(" ")[0] in commands.greetingsComical:
+                bom += 0.05
+                comico += 0.2
             sleep(0.7)
             await message.channel.send(commands.greetingsResponseUnknown["continuação"][randint(0, 4)])
         cursor.execute(f"INSERT INTO mind.users_info (username, bom, comico, ruim, ultima_interação) VALUES ('{usuarioReconhecido[0][0]}', 0, 0, 0, '{usuarioReconhecido[0][4]}')")
         cnx.commit()
         sleep(0.7)
     
-    if mensagem.split(" ")[0] in commands.greetings:
+
+    
+    if mensagem.split(" ")[0] in commands.greetings and respondido == False:
         respondido = True
         bom += 0.1
         if mensagem.split(" ")[0] in commands.greetingsComical:
@@ -170,7 +175,10 @@ async def on_message(message):
                 wordSeparateResponse = result.split(r"%br%")
 
                 for meanings in wordSeparateResponse:
-                    await message.channel.send(meanings)
+                    try:
+                        await message.channel.send(meanings)
+                    except:
+                        continue
             else:
                 await message.channel.send(result)
             await message.channel.send("**Resposta finalizada...**")
@@ -314,15 +322,26 @@ async def on_message(message):
 
         user[0].remove(message.author.name)
 
-    if  (mensagem.split(" ")[0] in commands.thanks or mensagem.split(" ")[1] in commands.thanks) and message.author.name in thankUsers:
-        await message.channel.send("De nada.")
-        respondido = True
-        thankUsers.remove(message.author.name)
-    elif mensagem.split(" ")[0] in commands.thanks or mensagem.split(" ")[1] in commands.thanks:
-        ruim += 0.05
-        await message.channel.send(commands.weirdThanksResponse[randint(0, 5)])
-    elif respondido == True and message.author.name not in thankUsers:
-        thankUsers.append(message.author.name)
+    try:
+        if  (mensagem.split(" ")[0] in commands.thanks or mensagem.split(" ")[1] in commands.thanks) and message.author.name in thankUsers:
+            if humorDoUsuario == "bom" or humorDoUsuario == "neutro":
+                await message.channel.send(commands.thankResponse["formal"][randint(0, 3)])
+            elif humorDoUsuario == "comico":
+                await message.channel.send(commands.thankResponse["coloquial"][randint(0, 3)])
+            else:
+                ruim += 0.2
+                await message.channel.send(commands.thankResponse["raivoso"][randint(0, 3)])
+            respondido = True
+            thankUsers.remove(message.author.name)
+
+        elif mensagem.split(" ")[0] in commands.thanks or mensagem.split(" ")[1] in commands.thanks:
+            ruim += 0.05
+            await message.channel.send(commands.weirdThanksResponse[randint(0, 5)])
+
+        elif respondido == True and message.author.name not in thankUsers:
+            thankUsers.append(message.author.name)
+    except:
+        pass
 
     if learning_mode == True and not respondido and message.author.name in user[0]:
         question = mensagem
@@ -334,6 +353,7 @@ async def on_message(message):
 
     bom, comico, ruim = commands.equilibroDePontos(bom, comico, ruim)
 
+    print("[Devatron] Process finished")
     cursor.execute(f"UPDATE mind.users_info SET bom={bom}, comico={comico}, ruim={ruim}, ultima_interação='{datetime.now().date()}' WHERE username='{usuarioReconhecido[0][0]}'")
     cnx.commit()
     cnx.close()
