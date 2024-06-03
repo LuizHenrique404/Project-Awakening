@@ -3,4 +3,4 @@ O sistema foi feito em pro de uma maior flexibilidade, e incrementação de sist
 # IMAGEM AQUI
 Para o funcionamento do sistema, diferentes ferramentas e algoritmos foram utilizados em diferentes partes.
 ### NÚCLEO DO SISTEMA
-O núcleo do sistema se trata do 
+O núcleo do sistema se trata do local onde todos os comandos são interpretados e as ordens principais são dadas
