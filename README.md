@@ -10,5 +10,10 @@ Sua conexão com o DataBase por meio do MySQL é essencial para seu funcionament
 Pois com ela, ele armazena os dados importantes envolvendo o usuáario e suas funções principais.
 Assim como também armazena os dados de comandos personalizados feitos via o seu modo de aprendizado.
 ### LEARNING_MODE
-Esta função permite que o usuário insira comandos no sistema, sem a necessidade de programaar, sendo assim, usuários comuns poderão contribuir com o desenvolvimento do Bot.
+![image](https://github.com/LuizHenrique404/Project-Awakening/assets/143651783/5405a7d0-aa91-4f62-915d-f46aed141bdb)
+<br>Esta função permite que o usuário insira comandos no sistema, sem a necessidade de programaar, sendo assim, usuários comuns poderão contribuir com o desenvolvimento do Bot.
 Por razões de segurança apenas usuários especificados na lista de Admins no arquivo de comandos podem adicionar.
+### MACHINE-LEARNING
+![image](https://github.com/LuizHenrique404/Project-Awakening/assets/143651783/724ac2ab-c746-4071-9f06-0722dd7dabed)
+<br>Boa parte do seu sistema é dedicado ao Machine-Learning, relacionado a classificação de imagens, e a forma com que o bot irá se comportar dependendo da forma com que o usuário estaria tratando o Bot em suas interações. Sendo assim, neste caso, se o usuário agir de maneira mais formal com o Bot, o Bot agirá da mesma forma. Assim como no caso do usuário agir de maneira mais descontraida, ou rude.
+<br>Para a construção das IAs foram utilizados o [RandomForesClassifier](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html), e o sistema de redes neurais sequenciais do [Keras](https://www.tensorflow.org/guide/keras/sequential_model?hl=pt-br).
