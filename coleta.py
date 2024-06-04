@@ -7,7 +7,6 @@
 # Site do Dicionário: https://www.dicio.com.br/palavra/
 # Site do Crypto: https://coinmarketcap.com/currencies/bitcoin/
 from bs4 import BeautifulSoup
-import mysql.connector
 import requests
 import commands
 
