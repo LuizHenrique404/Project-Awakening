@@ -88,7 +88,7 @@ def filtroDicionario(wordMeaning):
 # ADICIONAR UM FATOR DE ARMAZENAMENTO DE PERGUNTAS E RESPOSTAS NO DATABASE.
 
 # AUTHORIZATION
-admin = ("the_coder333", "linusdmarc", "m.luffy5404", "bondaismagic")
+admin = ("Discord User")
 
 # USER
 thanks = ("valeu", "obrigado", "brigado", "agradeco", "brigada", "obrigada", "obrigadao", "agradecida", "agradecido")
