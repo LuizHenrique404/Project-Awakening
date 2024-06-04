@@ -5,9 +5,9 @@ import pandas as pd
 import numpy as np
 import commands
 
-validation_path = "C:\\Users\\Mrleonard\\Documents\\Programs\\Project_Awakening\\Machine_Learning\\imageClassificationFolder\\Objects\\Validation"
-train_path = "C:\\Users\\Mrleonard\\Documents\\Programs\\Project_Awakening\\Machine_Learning\\imageClassificationFolder\\Objects\\Train"
-test_path = "C:\\Users\\Mrleonard\\Documents\\Programs\\Project_Awakening\\Machine_Learning\\imageClassificationFolder\\Objects\\Test"
+validation_path = "PATH"
+train_path = "PATH"
+test_path = "PATH"
 
 image_width = 165
 image_height = 165
