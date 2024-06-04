@@ -1,7 +1,7 @@
 ## Project-Awakening<br>Um projeto de teste, sobre inteligência artificial ChatBot.
 O sistema foi feito em pro de uma maior flexibilidade, e incrementação de sistemas de machine-learning,<br>e redes neurais para diferentes tarefas como: Classificação de imagens, Detecção de objetos, e definição<br>da forma com que o Bot deveria se comportar de acordo com o comportamento do usuário.
-# IMAGEM AQUI
-Para o funcionamento do sistema, diferentes ferramentas e algoritmos foram utilizados em diferentes partes.
+![image](https://github.com/LuizHenrique404/Project-Awakening/assets/143651783/a3ff14dc-4809-449d-8809-fa2db2e96576)
+<br>Para o funcionamento do sistema, diferentes ferramentas e algoritmos foram utilizados em diferentes partes.
 ### NÚCLEO DO SISTEMA
 O núcleo do sistema se trata do local onde todos os comandos são interpretados e as ordens principais são dadas.
 Por lá a conxeção com os outros arquivos e suas funções. Assim mantendo uma maior organização de código, e facilitando seu entendimento.
