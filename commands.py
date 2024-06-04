@@ -23,7 +23,7 @@ def filtro(brutoDaFrase: str):
     return filtoDaFrase
 
 def armazenamentoDeComandos(contentType: str, question: str, response: str):
-    cnx = mysql.connector.connect(user='root', password='pass334', host='localhost', database='mind')
+    cnx = mysql.connector.connect(user='user', password='pass', host='host', database='db')
     cursor = cnx.cursor()
     question = filtro(question)
 
