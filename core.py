@@ -16,7 +16,7 @@ import discord
 # -CHECAGEM NA IMPORTÂNCIA E REAÇÃO DOS PONTOS
 # -AUMENTAR A PRECISÃO DA CLASSIFICAÇÃO DAS IMAGENS
 
-botToken = "MTIxNjgxNjU4Mjg0MDU0OTM4Nw.GVIJ51.8ejBZn4DTaqWilXrUbEAyuO3WG4DSkxtNhLZXk"
+botToken = "BOT_TOKEN"
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -51,7 +51,7 @@ async def on_message(message):
         if message.author.name in user[1]:
             meaning = str(message.content)
 
-            cnx = mysql.connector.connect(user='root', password='pass334', host='localhost', database='mind')
+            cnx = mysql.connector.connect(user='usar', password='pass', host='host', database='db')
             cursor = cnx.cursor()
 
             cursor.execute(f"INSERT INTO mind.dictionary (palavra, significado) VALUES ('{word}', '{meaning}');")
@@ -87,7 +87,7 @@ async def on_message(message):
     
     mensagem = commands.filtro(message.content)
     print(mensagem.split(" ")[0])
-    cnx = mysql.connector.connect(user='root', password='pass334', host='localhost', database='mind')
+    cnx = mysql.connector.connect(user='usar', password='pass', host='host', database='db')
     cursor = cnx.cursor()
 
     cursor.execute(f"SELECT * FROM mind.users_info WHERE username='{message.author.name.lower()}';")
