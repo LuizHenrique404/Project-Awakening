@@ -5,10 +5,6 @@ SISTEMA DE PONTOS DO USUÁRIO:
 -NÚMERO ACIMA DE DEZ: Todos os pontos são multiplicados por 0.1 (10.0 > 1.0 / 5.0 > 0.5) 
 '''
 
-# INCLUIR: Object Detection
-# INCLUIR: Image Classification [Feito]
-# AO CRIAR SEU PRÓRIO BANCO DE DADOS: Utilize para treinamento ao menos 100 imagens.
-
 from sklearn.model_selection import train_test_split
 from keras import utils, models
 import tensorflow as tf
@@ -23,7 +19,7 @@ class HumorClassification():
     model = RandomForestClassifier(n_estimators=60)
 
     def __init__(self):
-        arquive = pd.read_csv("C:\\Users\\Mrleonard\\Documents\\Programs\\Project_Awakening\\Machine_Learning\\humor.csv")
+        arquive = pd.read_csv("Machine_Learning\\humor.csv")
         Y = arquive.drop(columns=["bom","comico","ruim"])
         X = arquive.drop(["resultado"], axis=1)
         X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.25)
