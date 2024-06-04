@@ -9,13 +9,6 @@ import mysql.connector
 import requests
 import discord
 
-
-# ULTIMAS ATUALIZAÇÕES
-# -OTIMIZAR AS OPERAÇÕES
-# -CHECAGEM FLEXIBILIDADE DAS INTERAÇÕES
-# -CHECAGEM NA IMPORTÂNCIA E REAÇÃO DOS PONTOS
-# -AUMENTAR A PRECISÃO DA CLASSIFICAÇÃO DAS IMAGENS
-
 botToken = "BOT_TOKEN"
 
 intents = discord.Intents.default()
@@ -51,7 +44,7 @@ async def on_message(message):
         if message.author.name in user[1]:
             meaning = str(message.content)
 
-            cnx = mysql.connector.connect(user='usar', password='pass', host='host', database='db')
+            cnx = mysql.connector.connect(user='user', password='pass', host='host', database='db')
             cursor = cnx.cursor()
 
             cursor.execute(f"INSERT INTO mind.dictionary (palavra, significado) VALUES ('{word}', '{meaning}');")
@@ -87,7 +80,7 @@ async def on_message(message):
     
     mensagem = commands.filtro(message.content)
     print(mensagem.split(" ")[0])
-    cnx = mysql.connector.connect(user='usar', password='pass', host='host', database='db')
+    cnx = mysql.connector.connect(user='user', password='pass', host='host', database='db')
     cursor = cnx.cursor()
 
     cursor.execute(f"SELECT * FROM mind.users_info WHERE username='{message.author.name.lower()}';")
